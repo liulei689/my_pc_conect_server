@@ -37,7 +37,7 @@ namespace Controls.Net7.App
                 {
                     imgpicstatus.Source = "state_3.png";
                     isopen = false;
-
+                    //1
 
                 }
                 else
