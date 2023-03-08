@@ -23,12 +23,9 @@ namespace Controls.Net7.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/GetRedisPcStatus")]
-        public string? GetRedisPcStatus()
-        {
+        public string? GetRedisPcStatus()=>_redisService.Database.StringGet("家-台式电脑-状态");
 
-            return _redisService.Database.StringGet("家-台式电脑-状态");
-
-        }
+        
         /// <summary>
         /// 关机
         /// </summary>
