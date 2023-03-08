@@ -68,7 +68,7 @@ namespace WindowApi
                 }
                 else
                 {
-                    LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpen", out string reslut, _token);
+                   // LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpen", out string reslut, _token);
                     try
                     {
                         runtimeout++;
