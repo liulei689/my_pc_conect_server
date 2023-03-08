@@ -9,6 +9,8 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace WindowApi
 {
@@ -184,7 +186,7 @@ namespace WindowApi
             return (hour.ToString() + "小时" + minute.ToString() + "分钟"
                 + second.ToString() + "秒");
         }
-        public static int HttpGet(string url, out string reslut)
+        public static int HttpGet(string url, out string reslut, string token = "")
         {
             reslut = "";
             try
@@ -193,6 +195,7 @@ namespace WindowApi
                 wbRequest.UserAgent = Environment.MachineName +" " + Environment.UserName;
                 wbRequest.Proxy = null;
                 wbRequest.Method = "GET";
+                wbRequest.Headers.Add("Authorization", "Bearer " + token);
                 HttpWebResponse wbResponse = (HttpWebResponse)wbRequest.GetResponse();
                 using (Stream responseStream = wbResponse.GetResponseStream())
                 {
@@ -209,7 +212,7 @@ namespace WindowApi
             }
             return 0;
         }
-        public static int HttpPost(string url, string sendData, out string reslut)
+        public static int HttpPost(string url, string sendData, out string reslut, string token = "")
         {
             reslut = "";
             try
@@ -220,7 +223,9 @@ namespace WindowApi
                 wbRequest.Method = "POST";
                 wbRequest.ContentType = "application/json";
                 wbRequest.ContentLength = data.Length;
+                wbRequest.Headers.Add("Authorization", "Bearer "+token);
 
+                //api/Token/GetToken
                 //#region //【1】获得请求流，OK
                 //Stream newStream = wbRequest.GetRequestStream();
                 //newStream.Write(data, 0, data.Length);

@@ -32,7 +32,7 @@ public partial class FileManger : ContentPage
             var ls =res.ToList();
             for (int m = 0; m < ls.Count; m++)
             {
-                var resp = await url.PostMultipartAsync(mp => mp
+                var resp = await url.WithOAuthBearerToken(MainPage._token).PostMultipartAsync(mp => mp
             .AddFile("files", ls[m].FullPath)).ReceiveJson<ResponseFileList>();
             }
           
