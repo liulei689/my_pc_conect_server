@@ -51,7 +51,7 @@ namespace WindowApi
 
                     LayoutKind.HttpPost("http://140.246.128.207:82/api/Token/GetToken", to, out string reslut112);
                     _token = reslut112;
-                    LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpen", out string reslut445, _token);
+                    LayoutKind.HttpGet("http://140.246.128.207:82/GetRedisPcStatus", out string reslut13, _token);
                 }
                 if (reslut1.Contains("关机"))
                 {
