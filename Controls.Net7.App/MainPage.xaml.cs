@@ -1,4 +1,6 @@
-﻿using Flurl.Http;
+﻿using Controls.Models;
+using Controls.Net7.Api.Model.Dto;
+using Flurl.Http;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Platform;
 using System.Diagnostics;
@@ -24,13 +26,25 @@ namespace Controls.Net7.App
         }
 
         bool isopen = false;
-
+       public static string _token = "";
         private async void ContentPage_Loaded(object sender, EventArgs e)
         {
             using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(500));
             while (await timer.WaitForNextTickAsync())
             {
-                string status = await "http://140.246.128.207:82/GetRedisPcStatus".GetStringAsync();
+                string status = "";
+                try
+                {
+                     status = await (DefalutConfig.BaseUrl+"GetRedisPcStatus").WithOAuthBearerToken(_token). GetStringAsync();
+                }catch(Exception ex) {
+                    if (ex.Message.Contains("Unauthorized")) 
+                    {
+                        _token =   await (DefalutConfig.BaseUrl + "api/Token/GetToken").PostJsonAsync(new UserDto() { Password= "1", UserName="手机端操作",Role="1"}).ReceiveString();
+                        status = await (DefalutConfig.BaseUrl +"GetRedisPcStatus").WithOAuthBearerToken(_token).GetStringAsync();
+
+                    }
+                }
+            
                 if (content.Text!=null && content.Text.Contains('\n') && content.Text.Split('\n').Length > 20) content.Text = "";
                 content.Text = status+"\n"+ content.Text;
                 if (status.Contains("关机"))
@@ -62,7 +76,7 @@ namespace Controls.Net7.App
                 {
                     try
                     {
-                        string ddd = await "http://140.246.128.207:82/SetRedisPcClose".GetStringAsync();
+                        string ddd = await "http://140.246.128.207:82/SetRedisPcClose".WithOAuthBearerToken(_token).GetStringAsync();
                         if (ddd == "true")
                         {
                             // await DisplayAlert("下发成功", "关机", "ok");
@@ -78,7 +92,7 @@ namespace Controls.Net7.App
             {
                 try
                 {
-                    string ddd = await "http://140.246.128.207:82/SetRedisPcOpen".GetStringAsync();
+                    string ddd = await "http://140.246.128.207:82/SetRedisPcOpen".WithOAuthBearerToken(_token).GetStringAsync();
                     if (ddd == "true")
                     {
                         //await DisplayAlert("下发成功", "开机", "ok"); 

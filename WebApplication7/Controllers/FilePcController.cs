@@ -1,7 +1,10 @@
 using Controls.Models;
+using Controls.Net7.Api.Jwt;
 using Controls.Net7.Api.Model;
 using Controls.Net7.Api.Redis;
 using Controls.Net7.Api.Untiys;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,15 +14,17 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Controls.Net7.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class FilePcController : ControllerBase
     {
         private readonly ILogger<FilePcController> _logger;
-
-        public FilePcController(ILogger<FilePcController> logger )
+        private readonly IJWTManager _iJWTManager;
+        public FilePcController(ILogger<FilePcController> logger ,IJWTManager iJWTManager)
         {
             _logger = logger;
+            _iJWTManager = iJWTManager;
         }
         /// <summary>
         /// 上传文件
@@ -57,6 +62,12 @@ namespace Controls.Net7.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> GetFileListAsync()
         {
+            //获取JWT
+            string AuthorizationToken = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
+            string JwtToken = AuthorizationToken.Split(' ')[1];
+
+            //解析JWT中的用户信息
+            var u = _iJWTManager.SerializeJwt(JwtToken);
             var filePath = FileHelper.GetBasePath();
             if (!System.IO.Directory.Exists(filePath)) return Ok(null);
             return new JsonResult(FileHelper.GetFilelist());
@@ -108,6 +119,11 @@ namespace Controls.Net7.Api.Controllers
             }
   
             return new JsonResult(FileHelper.GetFilelist());
+        }
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            return id == 1 ? NoContent(): Ok("1212");
         }
     }
 }

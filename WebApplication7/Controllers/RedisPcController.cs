@@ -1,5 +1,7 @@
+using Controls.Net7.Api.Jwt;
 using Controls.Net7.Api.Model;
 using Controls.Net7.Api.Redis;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -8,15 +10,18 @@ namespace Controls.Net7.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class RedisPcController : ControllerBase
     {
         private readonly ILogger<RedisPcController> _logger;
         private readonly IRedisService _redisService;
+        private readonly IJWTManager _iJWTManager;
 
-        public RedisPcController(ILogger<RedisPcController> logger,IRedisService redisService )
+        public RedisPcController(ILogger<RedisPcController> logger,IRedisService redisService,IJWTManager jWTManager)
         {
             _logger = logger;
             _redisService = redisService;
+            _iJWTManager = jWTManager;
         }
         /// <summary>
         /// 获取状态
@@ -33,7 +38,11 @@ namespace Controls.Net7.Api.Controllers
         [HttpGet("/SetRedisPcClose")]
         public bool SetRedisPcClose()
         {
-            return  _redisService.Database.StringSet($"家-台式电脑-状态", "关机|"+ Request.Headers.UserAgent +" "+ Request.HttpContext.Connection?.RemoteIpAddress?.MapToIPv4().ToString() + " " + DateTime.Now.ToString());
+            //获取JWT
+            string AuthorizationToken = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
+            string JwtToken = AuthorizationToken.Split(' ')[1];
+            var u = _iJWTManager.SerializeJwt(JwtToken);
+            return  _redisService.Database.StringSet($"家-台式电脑-状态", "关机|"+ u.User.UserName+Request.Headers.UserAgent +" "+ Request.HttpContext.Connection?.RemoteIpAddress?.MapToIPv4().ToString() + " " + DateTime.Now.ToString());
 
         }
         /// <summary>
@@ -43,7 +52,11 @@ namespace Controls.Net7.Api.Controllers
         [HttpGet("/SetRedisPcOpen")]
         public bool SetRedisPcOpen()
         {
-           return  _redisService.Database.StringSet($"家-台式电脑-状态", "开机|"+ Request.Headers.UserAgent + Request.HttpContext.Connection?.RemoteIpAddress?.MapToIPv4().ToString() + DateTime.Now.ToString());
+            //获取JWT
+            string AuthorizationToken = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
+            string JwtToken = AuthorizationToken.Split(' ')[1];
+            var u = _iJWTManager.SerializeJwt(JwtToken);
+            return  _redisService.Database.StringSet($"家-台式电脑-状态", "开机|" + u.User.UserName + Request.Headers.UserAgent + Request.HttpContext.Connection?.RemoteIpAddress?.MapToIPv4().ToString() + DateTime.Now.ToString());
 
         }
         /// <summary>

@@ -75,7 +75,7 @@ public partial class FileManger : ContentPage
     {
         Filelist.IsRefreshing = true;
         string url = "http://140.246.128.207:82/FilePc/GetFileList";
-        var resp = await url.PostAsync().ReceiveJson<ResponseFileList>();
+        var resp = await url.WithOAuthBearerToken(MainPage._token).PostAsync().ReceiveJson<ResponseFileList>();
         Filelist.ItemsSource = resp.FileList;
         Filelist.IsRefreshing = false;
 
@@ -105,7 +105,7 @@ public partial class FileManger : ContentPage
                 if (sd != null)
                 {
                     string url = "http://140.246.128.207:82/FilePc/Delete?filename=" + sd.FileName;
-                    var resp = await url.PostAsync().ReceiveString();
+                    var resp = await url.WithOAuthBearerToken(MainPage._token).PostAsync().ReceiveString();
                     ContentPage_Loaded(null, null);
                 }
             }
@@ -115,7 +115,7 @@ public partial class FileManger : ContentPage
             if (result != "" && result.Contains("."))
             {
                 string url = $"http://140.246.128.207:82/FilePc/Update?oldfilename={sd.FileName}&newfilename={result}";
-                var resp = await url.PostAsync().ReceiveJson<ResponseFileList>();
+                var resp = await url.WithOAuthBearerToken(MainPage._token).PostAsync().ReceiveJson<ResponseFileList>();
                 Filelist.ItemsSource = resp.FileList;
                 Filelist.IsRefreshing = false;
             }

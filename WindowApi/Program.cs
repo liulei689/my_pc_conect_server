@@ -32,7 +32,8 @@ namespace WindowApi
             while (true)
             {
                 LayoutKind.GetInfor();
-                LayoutKind.HttpGet("http://140.246.128.207:82/GetRedisPcStatus", out string reslut1);
+               // LayoutKind.HttpGet("http://140.246.128.207:82/GetRedisPcStatus", out string reslut1);
+                LayoutKind.HttpGet("http://localhost:5000/GetRedisPcStatus", out string reslut1);
                 if (reslut1.Contains("关机"))
                 {
                     if (cs1 == 0 || cs1 % 10 == 0)
