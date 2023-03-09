@@ -1,19 +1,11 @@
 using Controls.Net7.Api.Jwt;
 using Controls.Net7.Api.Redis;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 string? usecomnets =builder.Configuration.GetSection("Configs")["UseComments"];
 string? useswagger = builder.Configuration.GetSection("Configs")["UseSwagger"];
