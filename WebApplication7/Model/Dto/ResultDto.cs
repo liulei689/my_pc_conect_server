@@ -13,10 +13,7 @@ namespace Controls.Net7.Api.Model.Dto
     /// <typeparam name="T">类型</typeparam>
     public class ResultDto<T>:ResultDto where T : class
     {
-        public ResultDto()
-        {
-
-        }
+       
         public ResultDto(T data, string message, bool statusFlag)
         {
             this.Data = data;
@@ -32,10 +29,7 @@ namespace Controls.Net7.Api.Model.Dto
 
     public class ResultDto
     {
-        public ResultDto()
-        {
-
-        }
+   
 
         /// <summary>
         /// 状态
@@ -44,7 +38,7 @@ namespace Controls.Net7.Api.Model.Dto
         /// <summary>
         /// 消息
         /// </summary>
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         [Description("接口返回值")]
         public int ResposeCode { get; set; } = 200;

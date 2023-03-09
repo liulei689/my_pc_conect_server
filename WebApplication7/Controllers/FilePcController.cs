@@ -60,11 +60,11 @@ namespace Controls.Net7.Api.Controllers
         /// <returns></returns>
         [Route("GetFileList")]
         [HttpPost]
-        public async Task<IActionResult> GetFileListAsync()
+        public IActionResult GetFileListAsync()
         {
             //获取JWT
             string AuthorizationToken = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
-            string JwtToken = AuthorizationToken.Split(' ')[1];
+            string JwtToken = AuthorizationToken!.Split(' ')[1];
 
             //解析JWT中的用户信息
             var u = _iJWTManager.SerializeJwt(JwtToken);

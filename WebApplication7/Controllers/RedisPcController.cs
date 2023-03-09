@@ -40,9 +40,11 @@ namespace Controls.Net7.Api.Controllers
         {
             //获取JWT
             string AuthorizationToken = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
-            string JwtToken = AuthorizationToken.Split(' ')[1];
+            string JwtToken = AuthorizationToken!.Split(' ')[1];
             var u = _iJWTManager.SerializeJwt(JwtToken);
+#pragma warning disable CS8602 // 解引用可能出现空引用。
             return  _redisService.Database.StringSet($"家-台式电脑-状态", "关机|"+ u.User.UserName+Request.Headers.UserAgent +" "+ Request.HttpContext.Connection?.RemoteIpAddress?.MapToIPv4().ToString() + " " + DateTime.Now.ToString());
+#pragma warning restore CS8602 // 解引用可能出现空引用。
 
         }
         /// <summary>
@@ -54,10 +56,11 @@ namespace Controls.Net7.Api.Controllers
         {
             //获取JWT
             string AuthorizationToken = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
-            string JwtToken = AuthorizationToken.Split(' ')[1];
+            string JwtToken = AuthorizationToken!.Split(' ')[1];
             var u = _iJWTManager.SerializeJwt(JwtToken);
-            return  _redisService.Database.StringSet($"家-台式电脑-状态", "开机|" + u.User.UserName + Request.Headers.UserAgent + Request.HttpContext.Connection?.RemoteIpAddress?.MapToIPv4().ToString() + DateTime.Now.ToString());
-
+#pragma warning disable CS8602 // 解引用可能出现空引用。
+            return _redisService.Database.StringSet($"家-台式电脑-状态", "开机|" + u.User.UserName + Request.Headers.UserAgent + Request.HttpContext.Connection?.RemoteIpAddress?.MapToIPv4().ToString() + DateTime.Now.ToString());
+#pragma warning restore CS8602 // 解引用可能出现空引用。
         }
         /// <summary>
         /// 开机指定机器

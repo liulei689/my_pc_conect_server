@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Controls.Net7.App", "Contro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowApi", "WindowApi\WindowApi.csproj", "{2AD45622-3639-49AB-BE46-4176C6B630A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controls.Models", "Controls.Models\Controls.Models.csproj", "{25E1C861-EBB0-47EF-AEA4-2DDB6B2965B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Controls.Models", "Controls.Models\Controls.Models.csproj", "{25E1C861-EBB0-47EF-AEA4-2DDB6B2965B8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AF3A1754-761B-4602-8602-43219FA0807A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
