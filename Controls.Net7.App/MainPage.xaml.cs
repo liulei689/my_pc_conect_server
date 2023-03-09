@@ -92,7 +92,7 @@ namespace Controls.Net7.App
             {
                 try
                 {
-                    string ddd = await "http://140.246.128.207:82/SetRedisPcOpen".WithOAuthBearerToken(_token).GetStringAsync();
+                    string ddd = await ("http://140.246.128.207:82/SetRedisPcOpenByName?deviceStatus="+asdsd.Text).WithOAuthBearerToken(_token).GetStringAsync();
                     if (ddd == "true")
                     {
                         //await DisplayAlert("下发成功", "开机", "ok"); 
@@ -104,6 +104,12 @@ namespace Controls.Net7.App
                 catch (Exception ex) { await DisplayAlert(ex.Message, "接口异常", "ok"); }
 
             }
+        }
+
+        private async void asdsd_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string ddd = await("http://140.246.128.207:82/SetRedisPcOpenByName?deviceStatus=" + asdsd.Text).WithOAuthBearerToken(_token).GetStringAsync();
+
         }
     }
 }

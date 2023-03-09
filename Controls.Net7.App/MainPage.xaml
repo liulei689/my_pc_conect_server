@@ -12,7 +12,7 @@
                     WidthRequest="300"
                     Padding="16,8"
                     HorizontalOptions="Center">
-                    <Entry Text="1112" x:Name="asdsd"/>
+                    <Entry Text="检查开机" TextChanged="asdsd_TextChanged" x:Name="asdsd"/>
                 </Border>
             </HorizontalStackLayout>
             <ImageButton x:Name="imgpicstatus"  Source = "state_3.png" WidthRequest="200" HeightRequest="200" Clicked="imgpicstatus_Clicked"/>

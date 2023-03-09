@@ -31,10 +31,4 @@
     <ProjectReference Include="..\Controls.Models\Controls.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="System.Web.Extensions">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Web.Extensions.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

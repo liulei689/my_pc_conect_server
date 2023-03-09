@@ -64,10 +64,9 @@ namespace Controls.Net7.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/SetRedisPcOpenByName")]
-        public bool SetRedisPcOpenByName([FromQuery]DeviceStatus deviceStatus)
+        public bool SetRedisPcOpenByName([FromQuery]string deviceStatus)
         {
-            var ip = Request.Headers.UserAgent+Request.HttpContext.Connection?.RemoteIpAddress?.MapToIPv4().ToString();
-            return _redisService.Database.StringSet($"家-台式电脑-状态", ip);
+            return _redisService.Database.StringSet($"家-台式电脑-状态", "开机|" + deviceStatus + Request.Headers.UserAgent + Request.HttpContext.Connection?.RemoteIpAddress?.MapToIPv4().ToString() + DateTime.Now.ToString());
 
         }
     }
