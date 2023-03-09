@@ -8,9 +8,12 @@ using System.Text.Json;
 
 namespace Controls.Net7.Api.Controllers
 {
+    /// <summary>
+    /// redis管理
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
+    [Authorize("公共接口")]
     public class RedisPcController : ControllerBase
     {
         private readonly ILogger<RedisPcController> _logger;

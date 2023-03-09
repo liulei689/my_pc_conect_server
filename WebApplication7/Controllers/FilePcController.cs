@@ -14,7 +14,10 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Controls.Net7.Api.Controllers
 {
-    [Authorize]
+    /// <summary>
+    /// 文件管理
+    /// </summary>
+    [Authorize("公共接口")]
     [ApiController]
     [Route("[controller]")]
     public class FilePcController : ControllerBase

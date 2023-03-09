@@ -84,6 +84,9 @@
 	  <MauiXaml Update="Views\ImageZoom.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\MessageBox.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\UploadFile.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

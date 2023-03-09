@@ -75,6 +75,8 @@ builder.Services.AddAuthorization(options =>
 {
     // 接口上放[Authorize("admin")] 规定此接口需role为ll和xz才可访问 rolejwt时生成
        options.AddPolicy("授权的人", policy => policy.RequireRole("ll", "xz").Build());
+    options.AddPolicy("公共接口", policy => policy.RequireRole("1").Build());
+
 });
 #endregion
 
