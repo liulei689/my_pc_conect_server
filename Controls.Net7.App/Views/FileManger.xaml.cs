@@ -65,6 +65,7 @@ public partial class FileManger : ContentPage
         }
         catch (Exception ex)
         {
+            await DisplayAlert(ex.Message,"","");
             // The user canceled or something went wrong
         }
 

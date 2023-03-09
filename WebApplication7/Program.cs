@@ -44,19 +44,6 @@ else
             Description = "JWT授权(数据将在请求头中进行传输) 直接在下框中输入Bearer {token}（注意两者之间是一个空格）",
             Name = "Authorization" //JWT默认参数名称
         });
-      //  c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-      //  {
-      //{
-      //  new OpenApiSecurityScheme
-      //  {
-      //    Reference = new OpenApiReference
-      //    {
-      //      Type = ReferenceType.SecurityScheme,
-      //      Id = "Bearer"
-      //    },Scheme = "oauth2",Name = "Bearer",In = ParameterLocation.Header,
-      //  },new List<string>()
-      //}
-      //  });
     });
     #endregion
 }
@@ -83,10 +70,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 #endregion
+#region 授权 那些角色可以访问
+builder.Services.AddAuthorization(options =>
+{
+    // 接口上放[Authorize("admin")] 规定此接口需role为ll和xz才可访问 rolejwt时生成
+       options.AddPolicy("授权的人", policy => policy.RequireRole("ll", "xz").Build());
+    options.AddPolicy("公共接口", policy => policy.RequireRole("1").Build());
+
+});
+#endregion
 
 builder.Services.AddSingleton<IJWTManager, JWTManager>();
-
-
 //builder.WebHost.UseUrls("http://*:5000");
 builder.Services.AddControllers();
 var app = builder.Build();

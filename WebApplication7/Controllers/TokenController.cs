@@ -16,6 +16,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Controls.Net7.Api.Controllers
 {
+    /// <summary>
+    /// token相关
+    /// </summary>
     [ApiController]
     [Route("api/[controller]/[action]")]
     [EnableCors]

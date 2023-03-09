@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Controls.Net7.App.Views.MessageBox"
+             Title="MessageBox">
+    <VerticalStackLayout>
+        <TableView Intent="Settings">
+            <TableRoot>
+                <TableSection>
+                    <EntryCell Label="用户名"
+                     x:Name="username"  Placeholder="1" />
+                    <EntryCell Label="密码"
+                     x:Name="password"   Placeholder="1" />
+                    <EntryCell Label="角色"
+                     x:Name="role"   Placeholder="1" />
+                </TableSection>
+            </TableRoot>
+        </TableView>
+        <Button Text="确定" Clicked="Button_Clicked"></Button>
+    </VerticalStackLayout>
+</ContentPage>

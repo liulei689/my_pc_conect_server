@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Controls.Net7.Api.Controllers
 {
-    [Authorize]
+    [Authorize("授权的人")]
     [ApiController]
     [Route("[controller]")]
 
@@ -38,7 +38,7 @@ namespace Controls.Net7.Api.Controllers
         {
             //获取JWT
             string AuthorizationToken = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
-            string JwtToken = AuthorizationToken.Split(' ')[1];
+            string JwtToken = AuthorizationToken!.Split(' ')[1];
 
             //解析JWT中的用户信息
             var u = _iJWTManager.SerializeJwt(JwtToken);
