@@ -17,6 +17,7 @@ namespace WindowApi
     {
         public static string filename = "config.ini";
         public static string _token="";
+        public static UserDto ud=null;
         static void Main(string[] args)
         {
             
@@ -35,7 +36,21 @@ namespace WindowApi
             thread.IsBackground = false;
             thread.Start();
             if (!File.Exists(filename)) 
-            File.WriteAllText(filename, "5");
+            File.WriteAllText(filename, "5\r\n家台式机 1 1 ");
+            ud =new UserDto();
+            try
+            {
+              string[] datas= File.ReadAllLines("config.ini")[1].Split(' ');
+                ud.UserName = datas[0];
+                ud.Role = datas[2];
+                ud.Password = datas[1];
+            }
+            catch 
+            {
+                ud.UserName = "家台式机";
+                ud.Role = "1";
+                ud.Password = "1";
+            }
            
         }
        static int cs1 = 0;
@@ -47,7 +62,7 @@ namespace WindowApi
                 LayoutKind.HttpGet("http://140.246.128.207:82/GetRedisPcStatus", out string reslut1, _token);
                 if (reslut1.Contains("401"))
                 {
-                    string to = new JavaScriptSerializer().Serialize(new UserDto() { Password = "1", UserName = "家台式机操作", Role = "1" });
+                    string to = new JavaScriptSerializer().Serialize(new UserDto() { Password = ud.Password, UserName = ud.UserName, Role = ud.Role });
 
                     LayoutKind.HttpPost("http://140.246.128.207:82/api/Token/GetToken", to, out string reslut112);
                     _token = reslut112;
