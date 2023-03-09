@@ -1,3 +1,4 @@
+using Controls.Net7.Api.Db;
 using Controls.Net7.Api.Jwt;
 using Controls.Net7.Api.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -40,6 +41,7 @@ else
     #endregion
 }
 builder.Services.AddSingleton<IRedisService, RedisService>(serviceProvider => new RedisService(builder.Configuration.GetSection("redis")["ConnectionString"]));
+builder.Services.AddSingleton<ISqliteService, SqliteService>(serviceProvider => new SqliteService("Data Source=db.db"));
 #region ×¢²áJwtÑéÖ¤
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
 {
