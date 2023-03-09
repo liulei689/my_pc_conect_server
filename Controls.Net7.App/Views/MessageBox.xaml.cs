@@ -5,7 +5,7 @@ public partial class MessageBox : ContentPage
 	public MessageBox()
 	{
 		InitializeComponent();
-	}
+    }
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
@@ -15,6 +15,7 @@ public partial class MessageBox : ContentPage
         MainPage.role = role.Text;
 
         await Navigation.PopAsync();
+        MainPage.mainPage.gettoken();
 
     }
 }

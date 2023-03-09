@@ -41,12 +41,18 @@ namespace Controls.Net7.App
                 string status = "";
                 try
                 {
-                     status = await (DefalutConfig.BaseUrl+"GetRedisPcStatus").WithOAuthBearerToken(_token). GetStringAsync();
+                    if (_token == "密码错误")
+                    {
+                        status += "密码错误";
+
+                    }
+                    status += await (DefalutConfig.BaseUrl+"GetRedisPcStatus").WithOAuthBearerToken(_token). GetStringAsync();
                 }catch(Exception ex) {
                     if (ex.Message.Contains("Unauthorized"))
                     {
                         try
                         {
+                           
                             _token =   await (DefalutConfig.BaseUrl + "api/Token/GetToken").PostJsonAsync(new UserDto() { Password= passwword, UserName="手机端操作",Role=role}).ReceiveString();
 
                        

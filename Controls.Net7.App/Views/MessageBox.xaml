@@ -8,11 +8,11 @@
             <TableRoot>
                 <TableSection>
                     <EntryCell Label="用户名"
-                     x:Name="username"  Placeholder="1" />
+                     x:Name="username" Text="1" Placeholder="1" />
                     <EntryCell Label="密码"
-                     x:Name="password"   Placeholder="1" />
+                     x:Name="password" Text="1"  Placeholder="1" />
                     <EntryCell Label="角色"
-                     x:Name="role"   Placeholder="1" />
+                     x:Name="role" Text="1"  Placeholder="1" />
                 </TableSection>
             </TableRoot>
         </TableView>
