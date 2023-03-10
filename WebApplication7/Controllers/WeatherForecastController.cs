@@ -1,5 +1,5 @@
 ﻿
-using Controls.Net7.Api.Jwt;
+using Controls.Net7.Api.Commons.Jwt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

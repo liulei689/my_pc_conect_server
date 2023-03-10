@@ -1,13 +1,8 @@
 using Controls.Models;
-using Controls.Net7.Api.Db;
-using Controls.Net7.Api.Jwt;
-using Controls.Net7.Api.Model;
+using Controls.Net7.Api.Commons.Jwt;
 using Controls.Net7.Api.Model.Dto;
-using Controls.Net7.Api.Redis;
-using Microsoft.AspNetCore.Authorization;
+using Controls.Net7.Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Text.Json;
 
 namespace Controls.Net7.Api.Controllers
 {
@@ -33,12 +28,16 @@ namespace Controls.Net7.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("/AddUser")]
-        public Task<int> AddUser(UserDto userDto)=> _sqliteService.ActionTable(userDto, SqlAction.Add);
+        public Task<int> AddUser(UserDto userDto)=> _sqliteService.ActionUserTable(userDto, SqlAction.Add);
 
+        [HttpPost("/UpdateUserPassword")]
+        public Task<int> UpdateUserPassword(User userDto) => _sqliteService.ActionUserTable(userDto, SqlAction.UpdatePassword);
         [HttpPost("/UpdateUser")]
-        public Task<int> UpdateUser(UserDto userDto) => _sqliteService.ActionTable(userDto, SqlAction.Update);
+        public Task<int> UpdateUser(UserDto userDto) => _sqliteService.ActionUserTable(userDto, SqlAction.Update);
 
         [HttpPost("/DeleteUser")]
-        public Task<int> DeleteUser(string username) => _sqliteService.DeleteUser(username);
+        public Task<int> DeleteUser(string username) => _sqliteService.ActionUserTable(username, SqlAction.Delete);
+        [HttpPost("/SelectAllUser")]
+        public Task<IEnumerable<UserDto>> SelectAllUser() => _sqliteService.SelectUserAllAsync();
     }
 }

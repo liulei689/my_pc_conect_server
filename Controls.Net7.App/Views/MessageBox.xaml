@@ -2,20 +2,25 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Controls.Net7.App.Views.MessageBox"
-             Title="MessageBox">
+             >
     <VerticalStackLayout>
-        <TableView Intent="Settings">
+        <TableView  Intent="Form"  IsVisible="false" x:Name="UserDtos">
             <TableRoot>
                 <TableSection>
-                    <EntryCell Label="用户名"
-                     x:Name="username" Text="1" Placeholder="1" />
-                    <EntryCell Label="密码"
-                     x:Name="password" Text="1"  Placeholder="1" />
-                    <EntryCell Label="角色"
-                     x:Name="role" Text="1"  Placeholder="1" />
+                    <EntryCell Label="用户名" Text="{Binding UserName}"/>
+                    <EntryCell Label="密码" Text="{Binding Password}"/>
+                        <EntryCell x:Name="roles"   Label="权限" Text="{Binding Role}"/>
                 </TableSection>
             </TableRoot>
         </TableView>
-        <Button Text="确定" Clicked="Button_Clicked"></Button>
+        <TableView  Intent="Form" IsVisible="false" x:Name="UserDtosLogin">
+            <TableRoot>
+                <TableSection>
+                    <EntryCell Label="用户名" Text="{Binding UserName}"/>
+                    <EntryCell Label="密码" Text="{Binding Password}"/>
+                </TableSection>
+            </TableRoot>
+        </TableView>
+        <Button Text="确定"  Clicked="Button_Clicked"></Button>
     </VerticalStackLayout>
 </ContentPage>

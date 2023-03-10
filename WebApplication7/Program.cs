@@ -1,6 +1,5 @@
-using Controls.Net7.Api.Db;
-using Controls.Net7.Api.Jwt;
-using Controls.Net7.Api.Redis;
+using Controls.Net7.Api.Commons.Jwt;
+using Controls.Net7.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;

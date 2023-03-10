@@ -1,6 +1,6 @@
-using Controls.Net7.Api.Jwt;
+using Controls.Net7.Api.Commons.Jwt;
 using Controls.Net7.Api.Model;
-using Controls.Net7.Api.Redis;
+using Controls.Net7.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

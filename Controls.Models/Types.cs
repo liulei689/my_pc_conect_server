@@ -9,6 +9,8 @@ namespace Controls.Models
         Add,
         Delete,
         Update,
-        Select
+        Select,
+        UpdatePassword,
+        UpdateRole
     }
 }

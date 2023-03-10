@@ -62,7 +62,7 @@ namespace WindowApi
                 LayoutKind.HttpGet("http://140.246.128.207:82/GetRedisPcStatus", out string reslut1, _token);
                 if (reslut1.Contains("401"))
                 {
-                    string to = new JavaScriptSerializer().Serialize(new UserDto() { Password = ud.Password, UserName = ud.UserName, Role = ud.Role });
+                    string to = new JavaScriptSerializer().Serialize(new { Password = ud.Password, UserName = ud.UserName});
 
                     LayoutKind.HttpPost("http://140.246.128.207:82/api/Token/GetToken", to, out string reslut112);
                     _token = reslut112;

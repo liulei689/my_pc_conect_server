@@ -10,29 +10,22 @@ namespace Controls.Net7.App
 {
     public partial class MainPage : ContentPage
     {
-
         public static string username = "1";
         public static string passwword = "1";
         public static string role = "1";
         public static MainPage mainPage;
-
-
         public MainPage()
         {
             InitializeComponent();
-
 #if ANDROID
-
             Microsoft.Maui.Handlers.EntryHandler.Mapper.ModifyMapping("NoUnderline", (h, v, t) => { 
                 h.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Colors.Transparent.ToPlatform()); 
             });
 #endif
-
             mainPage = this;
         }
-
         bool isopen = false;
-       public static string _token = "";
+        public static string _token = "";
         private async void ContentPage_Loaded(object sender, EventArgs e)
         {
             using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(500));
@@ -41,54 +34,38 @@ namespace Controls.Net7.App
                 string status = "";
                 try
                 {
-                    if (_token == "密码错误")
-                    {
-                        status += "密码错误";
-
-                    }
-                    status += await (DefalutConfig.BaseUrl+"GetRedisPcStatus").WithOAuthBearerToken(_token). GetStringAsync();
-                }catch(Exception ex) {
+                    status = await (DefalutConfig.BaseUrl + "GetRedisPcStatus").WithOAuthBearerToken(_token).GetStringAsync();
+                }
+                catch (Exception ex)
+                {
                     if (ex.Message.Contains("Unauthorized"))
                     {
                         try
                         {
-                           
-                            _token =   await (DefalutConfig.BaseUrl + "api/Token/GetToken").PostJsonAsync(new UserDto() { Password= passwword, UserName="手机端操作",Role=role}).ReceiveString();
-
-                       
+                            _token = await (DefalutConfig.BaseUrl + "api/Token/GetToken").PostJsonAsync(new { Password = passwword, UserName = username }).ReceiveString();
                             status = await (DefalutConfig.BaseUrl + "GetRedisPcStatus").WithOAuthBearerToken(_token).GetStringAsync();
                         }
-                        catch(Exception ed) {
+                        catch (Exception ed)
+                        {
                             status = ed.Message;
-
-                            }
-
+                        }
                     }
-                    status = ex.Message;
+                    status = ex.Message + _token;
                 }
-            
-                if (content.Text!=null && content.Text.Contains('\n') && content.Text.Split('\n').Length > 20) content.Text = "";
-                content.Text = status+"\n"+ content.Text;
+                if (content.Text != null && content.Text.Contains('\n') && content.Text.Split('\n').Length > 20) content.Text = "";
+                content.Text = status + "\n" + content.Text;
                 if (status.Contains("关机"))
                 {
                     imgpicstatus.Source = "state_3.png";
                     isopen = false;
-                    //1
-
                 }
                 else
                 {
-                
                     imgpicstatus.Source = "state_0.png";
                     isopen = true;
-
                 }
             }
-
         }
-
-  
-
         private async void imgpicstatus_Clicked(object sender, EventArgs e)
         {
             if (isopen)
@@ -98,14 +75,12 @@ namespace Controls.Net7.App
                 {
                     try
                     {
-                        string ddd = await "http://140.246.128.207:82/SetRedisPcClose".WithOAuthBearerToken(_token).GetStringAsync();
+                        string ddd = await (DefalutConfig.BaseUrl + "SetRedisPcClose").WithOAuthBearerToken(_token).GetStringAsync();
                         if (ddd == "true")
                         {
                             // await DisplayAlert("下发成功", "关机", "ok");
                         }
                         else await DisplayAlert("下发失败", "关机", "ok");
-
-
                     }
                     catch (Exception ex) { await DisplayAlert(ex.Message, "接口异常", "ok"); }
                 }
@@ -114,36 +89,29 @@ namespace Controls.Net7.App
             {
                 try
                 {
-                    string ddd = await ("http://140.246.128.207:82/SetRedisPcOpenByName?deviceStatus="+asdsd.Text).WithOAuthBearerToken(_token).GetStringAsync();
+                    string ddd = await (DefalutConfig.BaseUrl + "SetRedisPcOpenByName?deviceStatus=" + asdsd.Text).WithOAuthBearerToken(_token).GetStringAsync();
                     if (ddd == "true")
                     {
                         //await DisplayAlert("下发成功", "开机", "ok"); 
                     }
                     else await DisplayAlert("下发失败", "开机", "ok");
-
-
                 }
                 catch (Exception ex) { await DisplayAlert(ex.Message, "接口异常", "ok"); }
-
             }
         }
-
         private async void Button_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MessageBox());
-
+            await Navigation.PushAsync(new MessageBox(new UserDto() { UserName="1",Password="2",Role="1"}));
         }
-        public async void gettoken()
+        public async void gettoken(UserDto o)
         {
-
-            _token = await(DefalutConfig.BaseUrl + "api/Token/GetToken").PostJsonAsync(new UserDto() { Password = passwword, UserName = "手机端操作", Role = role }).ReceiveString();
-
+            passwword = o.Password;
+            username= o.UserName;
+            _token = await (DefalutConfig.BaseUrl + "api/Token/GetToken").PostJsonAsync(new { Password = o.Password, UserName = o.UserName }).ReceiveString();
         }
-
         private async void asdsd_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string ddd = await("http://140.246.128.207:82/SetRedisPcOpenByName?deviceStatus=" + asdsd.Text).WithOAuthBearerToken(_token).GetStringAsync();
-
+            await (DefalutConfig.BaseUrl + "SetRedisPcOpenByName?deviceStatus=" + asdsd.Text).WithOAuthBearerToken(_token).GetStringAsync();
         }
     }
 }

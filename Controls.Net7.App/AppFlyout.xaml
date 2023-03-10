@@ -28,6 +28,12 @@
         </Tab>
 
     </FlyoutItem>
+    <FlyoutItem Title="用户管理" >
+        <ShellContent
+            Title="用户管理"
+            ContentTemplate="{DataTemplate lv:UserManger}"
+            Route="用户管理" />
+    </FlyoutItem>
 
 
 

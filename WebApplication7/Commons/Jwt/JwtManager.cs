@@ -10,13 +10,14 @@ using Controls.Net7.Api.Model.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
-namespace Controls.Net7.Api.Jwt
+namespace Controls.Net7.Api.Commons.Jwt
 {
 
     /// <summary>
     /// JWT加解密
     /// </summary>
-    public interface IJWTManager {
+    public interface IJWTManager
+    {
         /// <summary>
         /// 获取JWT
         /// </summary>
@@ -32,7 +33,7 @@ namespace Controls.Net7.Api.Jwt
 
     }
 
-    public class JWTManager:IJWTManager
+    public class JWTManager : IJWTManager
     {
         private readonly IConfiguration _configuration;
 
@@ -52,7 +53,7 @@ namespace Controls.Net7.Api.Jwt
             string iss = jwtmodel[nameof(JwtIssuerOptions.Issuer)];
             string aud = jwtmodel[nameof(JwtIssuerOptions.Audience)];
             string secret = jwtmodel[nameof(JwtIssuerOptions.SecurityKey)];
-            
+
             var dds = JsonSerializer.Serialize(tokenModel.User); ;
             var claims = new List<Claim>
               {
@@ -78,12 +79,12 @@ namespace Controls.Net7.Api.Jwt
                };
 
             // 可以将一个用户的多个角色全部赋予；
-            if(tokenModel.Role!=null)
-            claims.AddRange(tokenModel.Role.Split(',').Select(s => new Claim(ClaimTypes.Role, s)));
+            if (tokenModel.Role != null)
+                claims.AddRange(tokenModel.Role.Split(',').Select(s => new Claim(ClaimTypes.Role, s)));
 
 
             //秘钥 (SymmetricSecurityKey 对安全性的要求，密钥的长度太短会报出异常)
-             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var jwt = new JwtSecurityToken(
@@ -111,7 +112,7 @@ namespace Controls.Net7.Api.Jwt
             try
             {
                 jwtToken.Payload.TryGetValue(ClaimTypes.Role, out role);
-                jwtToken.Payload.TryGetValue("CID", out  cid);
+                jwtToken.Payload.TryGetValue("CID", out cid);
             }
             catch (Exception e)
             {
@@ -120,8 +121,8 @@ namespace Controls.Net7.Api.Jwt
             }
             var tm = new TokenModelJwt
             {
-                User= JsonSerializer.Deserialize<UserDto>(cid.ToString()),
-            Uid = int.Parse(jwtToken.Id),
+                User = JsonSerializer.Deserialize<UserDto>(cid.ToString()),
+                Uid = int.Parse(jwtToken.Id),
                 Role = role != null ? role.ToString() : "",
             };
             return tm;

@@ -1,16 +1,7 @@
-using Controls.Models;
-using Controls.Net7.Api.Jwt;
-using Controls.Net7.Api.Model;
-using Controls.Net7.Api.Redis;
+using Controls.Net7.Api.Commons.Jwt;
 using Controls.Net7.Api.Untiys;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Controls.Net7.Api.Controllers
 {

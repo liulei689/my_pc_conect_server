@@ -1,4 +1,4 @@
-﻿namespace Controls.Net7.Api.Jwt
+﻿namespace Controls.Net7.Api.Commons.Jwt
 {
     /// <summary>
     /// JWT配置项

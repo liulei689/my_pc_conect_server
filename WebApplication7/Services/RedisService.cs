@@ -1,4 +1,4 @@
-namespace Controls.Net7.Api.Redis
+namespace Controls.Net7.Api.Services
 {
     using StackExchange.Redis;
 
@@ -17,17 +17,17 @@ namespace Controls.Net7.Api.Redis
 
         public RedisService(string? connectionString)
         {
-            if (connectionString == null) connectionString="";
-            this._connectionMultiplexer = ConnectionMultiplexer.Connect(connectionString);
-            this.Database = _connectionMultiplexer.GetDatabase();
-            this.Multiplexer = this.Database.Multiplexer;
+            if (connectionString == null) connectionString = "";
+            _connectionMultiplexer = ConnectionMultiplexer.Connect(connectionString);
+            Database = _connectionMultiplexer.GetDatabase();
+            Multiplexer = Database.Multiplexer;
         }
 
         public void Dispose()
         {
-            if (this._connectionMultiplexer == null) return;
-            this._connectionMultiplexer.Close();
-            this._connectionMultiplexer.Dispose();
+            if (_connectionMultiplexer == null) return;
+            _connectionMultiplexer.Close();
+            _connectionMultiplexer.Dispose();
         }
     }
 }

@@ -75,7 +75,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\UserManger.xaml.cs">
+	    <DependentUpon>UserManger.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="AppFlyout.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\UserManger.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\FileManger.xaml">
