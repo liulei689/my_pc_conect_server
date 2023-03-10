@@ -83,7 +83,7 @@ if (useswagger=="true")
     app.UseSwaggerUI();
 }
 app.UseStaticFiles();
-app.UseAuthentication();//启用认证
+app.UseAuthentication();//启用认证1
 app.UseAuthorization();
 app.MapControllers();
 app.UseCors();
