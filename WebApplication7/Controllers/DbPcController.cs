@@ -13,15 +13,11 @@ namespace Controls.Net7.Api.Controllers
     [Route("[controller]")]
     public class DbPcController : ControllerBase
     {
-        private readonly ILogger<DbPcController> _logger;
         private readonly ISqliteService _sqliteService;
-        private readonly IJWTManager _iJWTManager;
 
-        public DbPcController(ILogger<DbPcController> logger, ISqliteService sqliteService, IJWTManager jWTManager)
+        public DbPcController(ISqliteService sqliteService)
         {
-            _logger = logger;
             _sqliteService = sqliteService;
-            _iJWTManager = jWTManager;
         }
         /// <summary>
         /// »ñÈ¡×´Ì¬
