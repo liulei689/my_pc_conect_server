@@ -20,12 +20,27 @@ namespace WindowApi
         public static UserDto ud=null;
         static void Main(string[] args)
         {
-            
-                LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpen", out string reslut, _token);           
+            if (!File.Exists(filename))
+                File.WriteAllText(filename, "5\r\nliu 123456 ");
+            ud = new UserDto();
+            try
+            {
+                string[] datas = File.ReadAllLines("config.ini")[1].Split(' ');
+                ud.UserName = datas[0];
+
+                ud.Password = datas[1];
+            }
+            catch
+            {
+                ud.UserName = "liu";
+
+                ud.Password = "123456";
+            }
+            LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpen", out string reslut, _token);           
            
                 if (reslut.Contains("401"))
                 {
-               string to= new JavaScriptSerializer().Serialize(new UserDto() { Password = "1", UserName = "家台式机操作", Role = "1" });
+                string to = new JavaScriptSerializer().Serialize(new { Password = ud.Password, UserName = ud.UserName });
 
                 LayoutKind.HttpPost("http://140.246.128.207:82/api/Token/GetToken", to, out string reslut112);
                     _token = reslut112;
@@ -35,22 +50,7 @@ namespace WindowApi
             Thread thread = new Thread(new ThreadStart(start));
             thread.IsBackground = false;
             thread.Start();
-            if (!File.Exists(filename)) 
-            File.WriteAllText(filename, "5\r\n家台式机 1 1 ");
-            ud =new UserDto();
-            try
-            {
-              string[] datas= File.ReadAllLines("config.ini")[1].Split(' ');
-                ud.UserName = datas[0];
-                ud.Role = datas[2];
-                ud.Password = datas[1];
-            }
-            catch 
-            {
-                ud.UserName = "家台式机";
-                ud.Role = "1";
-                ud.Password = "1";
-            }
+         
            
         }
        static int cs1 = 0;
@@ -58,7 +58,7 @@ namespace WindowApi
         {
             while (true)
             {
-                LayoutKind.GetInfor();
+              string message=  LayoutKind.GetInfor();
                 LayoutKind.HttpGet("http://140.246.128.207:82/GetRedisPcStatus", out string reslut1, _token);
                 if (reslut1.Contains("401"))
                 {
@@ -70,7 +70,7 @@ namespace WindowApi
                 }
                 if (reslut1.Contains("检查开机"))
                 {
-                    LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpenByName?deviceStatus=开机中", out string reslut13, _token);
+                    LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpenByName?deviceStatus=运行中"+ ud.UserName+ message, out string reslut13, _token);
                        
                 }
                     if (reslut1.Contains("关机"))
@@ -78,10 +78,10 @@ namespace WindowApi
                     if (cs1 == 0 || cs1 % 10 == 0)
                     {
 
-                        LayoutKind.SendEmailTo("执行了远程关机操作");
-                        File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + "执行关机\r\n");
-                        Thread.Sleep(1000);
-                        Process.Start("shutdown", "/s /t 0");
+                        //LayoutKind.SendEmailTo("执行了远程关机操作");
+                        //File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + "执行关机\r\n");
+                        //Thread.Sleep(1000);
+                        //Process.Start("shutdown", "/s /t 0");
 
                     }
                     cs1++;

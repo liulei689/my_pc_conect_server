@@ -16,6 +16,7 @@
                 </Border>
                 <Button Text="登录" Clicked="Button_Clicked"
                         />
+
             </HorizontalStackLayout>
             <ImageButton x:Name="imgpicstatus"  Source = "state_3.png" WidthRequest="200" HeightRequest="200" Clicked="imgpicstatus_Clicked"/>
             <Label x:Name="content" VerticalOptions="End" />

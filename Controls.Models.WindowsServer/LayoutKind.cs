@@ -64,13 +64,17 @@ namespace WindowApi
         {
             for (int i = 0; i < checkTables.Count; i++)
             {
-                if (!checkTables[i].IsAchieve && dd > checkTables[i].TimeGOlal) { checkTables[i].IsAchieve = true; return true; }
+                if (!checkTables[i].IsAchieve && dd > checkTables[i].TimeGOlal) 
+                { 
+                    checkTables[i].IsAchieve = true; return true; 
+                }
             }
             return false;
         }
         public static bool ListInputTimeCheck(out long dd) 
         {
-            dd = GetLastInputTime();     
+            dd = GetLastInputTime();
+            return true;
                 if(check_is_ready(dd)) return true; 
             if (dd == 0)
             {
@@ -142,30 +146,40 @@ namespace WindowApi
            
             return false;
         }
-        public static void GetInfor() {
+        public static string GetInfor() {
           
             long dd;
+            double hour;
+            try
+            {
+                double.TryParse(File.ReadAllLines("config.ini")[0], out hour);
+            }
+            catch
+            {
+                hour = 5;
+            }
             if (ListInputTimeCheck(out dd))
             {
-                double hour;
-                try
-                {
-                    double.TryParse(File.ReadAllLines("config.ini")[0], out hour);
-                }
-                catch
-                {
-                    hour = 5;
-                }
-                File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString()+"时长达到：" + LayoutKind.formatLongToTimeStr(dd) + "。达到"+ hour.ToString()+"小时关机\r\n");
+              
+               // File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString()+"时长达到：" + LayoutKind.formatLongToTimeStr(dd) + "。达到"+ hour.ToString()+"小时关机\r\n");
                double time= hour * 60 * 60 * 1000;
                 if (dd > 0 && dd > time) 
                 {
-                    LayoutKind.SendEmailTo(LayoutKind.formatLongToTimeStr(dd));
-                    File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + "执行关机\r\n");
-                    Thread.Sleep(1000);
-                    Process.Start("shutdown", "/s /t 0"); 
+
+                    //LayoutKind.SendEmailTo(LayoutKind.formatLongToTimeStr(dd));
+                    //File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + "执行关机\r\n");
+                    //Thread.Sleep(1000);
+                    //Process.Start("shutdown", "/s /t 0"); 
+                    return "执行关机;闲时时间：" + formatLongToTimeStr(dd) + "需闲时时间:" + hourtototal(hour) + "小时";
+
                 }
+                return "闲时时间："+ formatLongToTimeStr(dd) + "需闲时时间:" + hourtototal(hour) + "小时";
+
             };
+            return "闲时时间：" + formatLongToTimeStr(dd) + "需闲时时间:" + hourtototal(hour) + "小时"; ;
+        }
+        public static string hourtototal(double a) {
+        return $"{(int)a}小时 {(int)((a * 3600) % 3600 / 60)}分 {(int)((a * 3600) % 60)}秒" ;
         }
         public static string formatLongToTimeStr(long l)
         {

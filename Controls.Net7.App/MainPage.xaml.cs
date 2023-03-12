@@ -5,6 +5,8 @@ using Flurl.Http;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Platform;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Controls.Net7.App
 {
@@ -26,6 +28,7 @@ namespace Controls.Net7.App
         }
         bool isopen = false;
         public static string _token = "";
+        int timeout = 0;
         private async void ContentPage_Loaded(object sender, EventArgs e)
         {
             using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(500));
@@ -34,7 +37,13 @@ namespace Controls.Net7.App
                 string status = "";
                 try
                 {
+                    timeout++;
                     status = await (DefalutConfig.BaseUrl + "GetRedisPcStatus").WithOAuthBearerToken(_token).GetStringAsync();
+                    if (timeout >= 10)
+                    {
+                        await (DefalutConfig.BaseUrl + "SetRedisPcOpenByName?deviceStatus=检查开机" + username).WithOAuthBearerToken(_token).GetStringAsync();
+                        timeout = 0;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -53,6 +62,7 @@ namespace Controls.Net7.App
                     status = ex.Message + _token;
                 }
                 if (content.Text != null && content.Text.Contains('\n') && content.Text.Split('\n').Length > 20) content.Text = "";
+                if(!status.Contains("检查开机"))
                 content.Text = status + "\n" + content.Text;
                 if (status.Contains("关机"))
                 {
