@@ -34,7 +34,7 @@ namespace WindowApi
             {
                 ud.UserName = "liu";
 
-                ud.Password = "123456";
+                ud.Password = "1234567";
             }
             LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpen", out string reslut, _token);           
            
@@ -58,59 +58,108 @@ namespace WindowApi
         {
             while (true)
             {
-              string message=  LayoutKind.GetInfor();
+                string message = LayoutKind.GetInfor();
                 LayoutKind.HttpGet("http://140.246.128.207:82/GetRedisPcStatus", out string reslut1, _token);
                 if (reslut1.Contains("401"))
                 {
-                    string to = new JavaScriptSerializer().Serialize(new { Password = ud.Password, UserName = ud.UserName});
+                    string to = new JavaScriptSerializer().Serialize(new { Password = ud.Password, UserName = ud.UserName });
 
                     LayoutKind.HttpPost("http://140.246.128.207:82/api/Token/GetToken", to, out string reslut112);
-                    _token = reslut112;
+                    ApiResult datoken = new JavaScriptSerializer().Deserialize<ApiResult>(reslut112);
+
+                    _token = datoken.Data.ToString();
                     LayoutKind.HttpGet("http://140.246.128.207:82/GetRedisPcStatus", out string reslut13, _token);
                 }
-                if (reslut1.Contains("检查开机"))
+                try
                 {
-                    LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpenByName?deviceStatus=运行中"+ ud.UserName+ message, out string reslut13, _token);
-                       
-                }
-                    if (reslut1.Contains("关机"))
-                {
-                    if (cs1 == 0 || cs1 % 10 == 0)
+                    PcStatus pcStatus = new JavaScriptSerializer().Deserialize<PcStatus>(reslut1);
+                    if (pcStatus.PcCmd == "检查开机")
                     {
-
-                        //LayoutKind.SendEmailTo("执行了远程关机操作");
-                        //File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + "执行关机\r\n");
-                        //Thread.Sleep(1000);
-                        //Process.Start("shutdown", "/s /t 0");
+                        LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcCmd?cmd=运行中" + ud.UserName + message, out string reslut13, _token);
 
                     }
-                    cs1++;
-                }
-                else
-                {
-                   // LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpen", out string reslut, _token);
-                    try
+                    if (pcStatus.PcStatu == "关机")
                     {
-                        runtimeout++;
-                        if (runtimeout > 2)
+                        if (cs1 == 0 || cs1 % 10 == 0)
                         {
-                            Tongbu();
-                            runtimeout= 0;
+
+                            //LayoutKind.SendEmailTo("执行了远程关机操作");
+                            //File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + "执行关机\r\n");
+                            //Thread.Sleep(1000);
+                            //Process.Start("shutdown", "/s /t 0");
+
+                        }
+                        cs1++;
+                    }
+                    else
+                    {
+                        // LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpen", out string reslut, _token);
+                        try
+                        {
+                            runtimeout++;
+                            if (runtimeout > 2)
+                            {
+                                Tongbu();
+                                runtimeout = 0;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + ex.Message + "\r\n");
                         }
                     }
-                    catch(Exception ex)
-                    {
-                        File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + ex.Message+"\r\n");
-                    }
+                    Thread.Sleep(10000);
                 }
-                Thread.Sleep(10000);
-            }
+                catch { Thread.Sleep(10000); }
+                }
+        }
+        public class PcStatus
+        {
+            public string PcStatu { get; set; } = "开机";
+            public string PcCmd { get; set; } = "检查开机";
 
+            public string PcIp { get; set; } = "127.0.0.1";
+            public string PcName { get; set; } = "";
+            public string PcLoginName { get; set; } = "";
+            public DateTime Time { get; set; }
+            public string Other { get; set; } = "";
+        }
+        public class ApiResult
+        {
+            /// <summary>
+            /// 返回码
+            /// </summary>
+            public int Code { get; set; }
+            /// <summary>
+            /// 返回提示信息
+            /// </summary>
+            public string Message { get; set; }
+            /// <summary>
+            /// 返回数据
+            /// </summary>
+            public object Data { get; set; }
+        }
+        public class ApiResultF
+        {
+            /// <summary>
+            /// 返回码
+            /// </summary>
+            public int Code { get; set; }
+            /// <summary>
+            /// 返回提示信息
+            /// </summary>
+            public string Message { get; set; }
+            /// <summary>
+            /// 返回数据
+            /// </summary>
+            public ResponseFileList Data { get; set; }
         }
         #region 文件同步
         public static void Tongbu() {
             LayoutKind.HttpPost("http://140.246.128.207:82/FilePc/GetFileList", "", out string reslutf, _token);
-            var value = new JavaScriptSerializer().Deserialize<ResponseFileList>(reslutf);
+            var value2 = new JavaScriptSerializer().Deserialize<ApiResultF>(reslutf);
+        
+            ResponseFileList value = value2.Data;
             if (value != null && value.Counts > 0)
             {
                 for (int i = 0; i < value.FileList.Count; i++)

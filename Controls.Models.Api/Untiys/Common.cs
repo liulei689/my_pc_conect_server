@@ -22,6 +22,7 @@ namespace Controls.Net7.Api.Untiys
                     PcCmd= Cmd,
                     PcLoginName = u.User.UserName,
                     PcIp = httpRequest?.HttpContext?.Connection?.RemoteIpAddress?.MapToIPv4().ToString(),
+                    Time =DateTime.Now,
                     Other = httpRequest.Headers.UserAgent
                 };
                 _redisService.Database.StringSet($"家-台式电脑-状态", JsonSerializer.Serialize(rpd));

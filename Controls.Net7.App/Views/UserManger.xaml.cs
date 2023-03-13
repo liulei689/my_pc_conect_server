@@ -2,6 +2,7 @@ using Controls.Models;
 using Controls.Net7.Api.Model.Dto;
 using Controls.Net7.App.Uintitys;
 using Flurl.Http;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -44,8 +45,8 @@ public partial class UserManger : ContentPage
     private async void ContentPage_Loaded(object sender, EventArgs e)
     {
         Filelist.IsRefreshing = true;
-        var resp = await "SelectAllUser".GetUrl().PostAsync().ReceiveJson<IEnumerable<UserDto>>();
-        Filelist.ItemsSource = resp;
+        var resp = await "SelectAllUser".GetUrl().PostAsync().ReceiveJson<ApiResult>();
+        Filelist.ItemsSource = (resp.Data as JToken).ToObject<IEnumerable<UserDto>>();
         Filelist.IsRefreshing = false;
 
     }

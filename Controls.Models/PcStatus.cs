@@ -12,6 +12,7 @@ namespace Controls.Models
         public string PcIp { get; set; } = "127.0.0.1";
         public string PcName { get; set; } = "";
         public string PcLoginName { get; set; } = "";
+        public DateTime Time { get; set; }
         public string Other { get; set; } = "";
     }
 }

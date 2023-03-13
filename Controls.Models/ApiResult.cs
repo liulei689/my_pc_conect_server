@@ -1,9 +1,21 @@
 ﻿namespace Controls.Models
 {
+    public class BaseResult 
+    {
+        public int Code { get; set; }
+        /// <summary>
+        /// 返回提示信息
+        /// </summary>
+        public string Message { get; set; }
+    }
+    public class PcStatuResult:BaseResult
+    {
+        public PcStatus Data { get; set; }
+    }
     /// <summary>
     /// Api 消息返回类基础模板
     /// </summary>
-    public class ApiResult
+    public class ApiResult: BaseResult
     {
         public ApiResult(int code, string message, object data)
         {
@@ -14,14 +26,6 @@
         public ApiResult()
         {
         }
-        /// <summary>
-        /// 返回码
-        /// </summary>
-        public int Code { get; set; }
-        /// <summary>
-        /// 返回提示信息
-        /// </summary>
-        public string Message { get; set; }
         /// <summary>
         /// 返回数据
         /// </summary>

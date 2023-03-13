@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Controls.Net7.Api.Controllers
 {
@@ -32,7 +33,11 @@ namespace Controls.Net7.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/GetRedisPcStatus")]
-        public ApiResult GetRedisPcStatus()=> ResultOk(_redisService.Database.StringGet("家-台式电脑-状态"));
+        public ApiResult GetRedisPcStatus()
+        {
+            PcStatus status= JsonSerializer.Deserialize<PcStatus>(_redisService.Database.StringGet("家-台式电脑-状态"));
+          return ApiResult.OkData(status);
+        }
 
         
         /// <summary>
@@ -58,7 +63,7 @@ namespace Controls.Net7.Api.Controllers
         /// 开机指定机器
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/SetRedisPcOpenByName")]
+        [HttpGet("/SetRedisPcCmd")]
         public ApiResult SetRedisPcCmd([FromQuery]string cmd)
         {
             return Common.SetPcSatusReponse("开机", HttpContext, _iJWTManager, Request, _redisService,cmd);

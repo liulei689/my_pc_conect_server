@@ -209,7 +209,7 @@ namespace WindowApi
                 wbRequest.UserAgent = Environment.MachineName +" " + Environment.UserName;
                 wbRequest.Proxy = null;
                 wbRequest.Method = "GET";
-                wbRequest.Headers.Add("Authorization", "Bearer " + token);
+                wbRequest.Headers.Add("Authorization",  token);
                 HttpWebResponse wbResponse = (HttpWebResponse)wbRequest.GetResponse();
                 using (Stream responseStream = wbResponse.GetResponseStream())
                 {
@@ -237,7 +237,7 @@ namespace WindowApi
                 wbRequest.Method = "POST";
                 wbRequest.ContentType = "application/json";
                 wbRequest.ContentLength = data.Length;
-                wbRequest.Headers.Add("Authorization", "Bearer "+token);
+                wbRequest.Headers.Add("Authorization", token);
 
                 //api/Token/GetToken
                 //#region //【1】获得请求流，OK

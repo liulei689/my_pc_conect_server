@@ -1,5 +1,6 @@
 using Controls.Models;
 using Flurl.Http;
+using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.IO;
 
@@ -76,8 +77,8 @@ public partial class FileManger : ContentPage
     {
         Filelist.IsRefreshing = true;
         string url = "http://140.246.128.207:82/FilePc/GetFileList";
-        var resp = await url.WithOAuthBearerToken(MainPage._token).PostAsync().ReceiveJson<ResponseFileList>();
-        Filelist.ItemsSource = resp.FileList;
+        var resp = await url.WithOAuthBearerToken(MainPage._token).PostAsync().ReceiveJson<ApiResult>();
+        Filelist.ItemsSource = (resp.Data as JToken).ToObject<ResponseFileList>().FileList;
         Filelist.IsRefreshing = false;
 
     }
@@ -116,8 +117,8 @@ public partial class FileManger : ContentPage
             if (result != "" && result.Contains("."))
             {
                 string url = $"http://140.246.128.207:82/FilePc/Update?oldfilename={sd.FileName}&newfilename={result}";
-                var resp = await url.WithOAuthBearerToken(MainPage._token).PostAsync().ReceiveJson<ResponseFileList>();
-                Filelist.ItemsSource = resp.FileList;
+                var resp = await url.WithOAuthBearerToken(MainPage._token).PostAsync().ReceiveJson<ApiResult>(); ;
+                Filelist.ItemsSource = (resp.Data as JToken).ToObject<ResponseFileList>().FileList;
                 Filelist.IsRefreshing = false;
             }
         }
