@@ -10,16 +10,19 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Web.Script.Serialization;
 using System.Net;
+using System.Xml.Linq;
 
 namespace WindowApi
 {
     public class Program
     {
+
         public static string filename = "config.ini";
         public static string _token="";
         public static UserDto ud=null;
         static void Main(string[] args)
         {
+   
             if (!File.Exists(filename))
                 File.WriteAllText(filename, "5\r\nliu 123456 ");
             ud = new UserDto();
@@ -45,7 +48,9 @@ namespace WindowApi
                 LayoutKind.HttpPost("http://140.246.128.207:82/api/Token/GetToken", to, out string reslut112);
                     _token = reslut112;
                     LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpen", out string reslut445, _token);
-                }
+              
+
+            }
             
             Thread thread = new Thread(new ThreadStart(start));
             thread.IsBackground = false;
@@ -72,28 +77,45 @@ namespace WindowApi
                 }
                 try
                 {
-                    PcStatus pcStatus = new JavaScriptSerializer().Deserialize<PcStatus>(reslut1);
-                    if (pcStatus.PcCmd == "检查开机")
+                    ApiResultD pcStatus = new JavaScriptSerializer().Deserialize<ApiResultD>(reslut1);
+                    
+                    if (pcStatus.Data.PcCmd == PcCmd.AddTime)
                     {
-                        LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcCmd?cmd=运行中" + ud.UserName + message, out string reslut13, _token);
+                        pcStatus.Data.PcCmd = PcCmd.Check;
+                        pcStatus.Data.TimeAdd = 0;
+                        pcStatus.Data.Time=DateTime.Now.ToString();
+                        pcStatus.Data.Other = message;
+                        string to = new JavaScriptSerializer().Serialize(pcStatus.Data);
+
+                        LayoutKind.HttpPost("http://140.246.128.207:82/SetRedisPcCmd", to, out string reslut13, _token);
 
                     }
-                    if (pcStatus.PcStatu == "关机")
+                    else if (pcStatus.Data.PcCmd == PcCmd.Check)
+                    {
+                        pcStatus.Data.PcCmd = PcCmd.Check;
+                        pcStatus.Data.Other = message;
+                        pcStatus.Data.Time=DateTime.Now.ToString();   
+                        string to2 = new JavaScriptSerializer().Serialize(pcStatus.Data);
+
+                        LayoutKind.HttpPost("http://140.246.128.207:82/SetRedisPcCmd", to2, out string reslut134, _token);
+
+                    }
+
+                    if (pcStatus.Data.PcStatu == PcCmd.TurnOff)
                     {
                         if (cs1 == 0 || cs1 % 10 == 0)
                         {
 
-                            //LayoutKind.SendEmailTo("执行了远程关机操作");
-                            //File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + "执行关机\r\n");
-                            //Thread.Sleep(1000);
-                            //Process.Start("shutdown", "/s /t 0");
+                            LayoutKind.SendEmailTo("关机原因：上位机下发指令");
+                            File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + "执行关机\r\n");
+                            Thread.Sleep(1000);
+                            Process.Start("shutdown", "/s /t 0");
 
                         }
                         cs1++;
                     }
                     else
                     {
-                        // LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpen", out string reslut, _token);
                         try
                         {
                             runtimeout++;
@@ -115,14 +137,23 @@ namespace WindowApi
         }
         public class PcStatus
         {
-            public string PcStatu { get; set; } = "开机";
-            public string PcCmd { get; set; } = "检查开机";
+            public PcCmd PcStatu { get; set; } = PcCmd.TurnOn;
+            public PcCmd PcCmd { get; set; } = PcCmd.Check;
+            public int TimeAdd { get; set; } = 0;
 
             public string PcIp { get; set; } = "127.0.0.1";
             public string PcName { get; set; } = "";
             public string PcLoginName { get; set; } = "";
-            public DateTime Time { get; set; }
+            public string Time { get; set; }
             public string Other { get; set; } = "";
+        }
+        public enum PcCmd
+        {
+            Check,
+            ServerUpdate,
+            TurnOn,
+            TurnOff,
+            AddTime
         }
         public class ApiResult
         {
@@ -138,6 +169,21 @@ namespace WindowApi
             /// 返回数据
             /// </summary>
             public object Data { get; set; }
+        }
+        public class ApiResultD
+        {
+            /// <summary>
+            /// 返回码
+            /// </summary>
+            public int Code { get; set; }
+            /// <summary>
+            /// 返回提示信息
+            /// </summary>
+            public string Message { get; set; }
+            /// <summary>
+            /// 返回数据
+            /// </summary>
+            public PcStatus Data { get; set; }
         }
         public class ApiResultF
         {

@@ -9,13 +9,13 @@
             VerticalOptions="Start">
             <HorizontalStackLayout>
                 <Border Stroke="Gray"
-                    WidthRequest="300"
+                    WidthRequest="200"
                     Padding="16,8"
                     HorizontalOptions="Center">
-                    <Entry Text="检查开机" TextChanged="asdsd_TextChanged" x:Name="asdsd"/>
+                    <Entry Text="1000"  x:Name="asdsd"/>
                 </Border>
-                <Button Text="登录" Clicked="Button_Clicked"
-                        />
+                <Button Text="登录" Clicked="Button_Clicked"/>
+                <Button Text="增加时长" Clicked="Button_Clicked_1" />
 
             </HorizontalStackLayout>
             <ImageButton x:Name="imgpicstatus"  Source = "state_3.png" WidthRequest="200" HeightRequest="200" Clicked="imgpicstatus_Clicked"/>

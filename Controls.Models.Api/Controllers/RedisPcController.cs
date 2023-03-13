@@ -39,18 +39,22 @@ namespace Controls.Net7.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/SetRedisPcClose")]
-        public ApiResult SetRedisPcClose()=> Common.SetPcSatusReponse("关机",HttpContext,_iJWTManager, Request,_redisService);
+        public ApiResult SetRedisPcClose()=> Common.SetPcSatusReponse( HttpContext,_iJWTManager, Request,_redisService,Cmd: PcCmd.TurnOff);
         /// <summary>
         /// 开机
         /// </summary>
         /// <returns></returns>
         [HttpGet("/SetRedisPcOpen")]
-        public ApiResult SetRedisPcOpen()=>Common.SetPcSatusReponse("开机", HttpContext, _iJWTManager, Request, _redisService);
+        public ApiResult SetRedisPcOpen()=>Common.SetPcSatusReponse(HttpContext, _iJWTManager, Request, _redisService,Cmd:PcCmd.TurnOn);
         /// <summary>
-        /// 开机指定机器
+        /// 指令行带参数
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/SetRedisPcCmd")]
-        public ApiResult SetRedisPcCmd([FromQuery]string cmd) => Common.SetPcSatusReponse("开机", HttpContext, _iJWTManager, Request, _redisService,cmd);
+        [HttpPost("/SetRedisPcCmd")]
+        public ApiResult SetRedisPcCmd([FromBody] PcStatus cmd)
+        {
+          var data=  cmd;
+          return  Common.SetPcSatusReponse(HttpContext, _iJWTManager, Request, _redisService, PcCmd.AddTime, data);
+        }
     }
 }

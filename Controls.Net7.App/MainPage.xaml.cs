@@ -37,9 +37,9 @@ namespace Controls.Net7.App
             {
                 var repons = await(DefalutConfig.BaseUrl + "api/Token/GetToken").PostJsonAsync(new { Password = passwword, UserName = username }).ReceiveJson<ApiResult>();
                 _token = repons.Data.ToString().Replace("Bearer ", "");
-                 await (DefalutConfig.BaseUrl + "GetRedisPcStatus").WithOAuthBearerToken(_token).GetAsync().ReceiveJson<PcStatuResult>();
+               //  await (DefalutConfig.BaseUrl + "GetRedisPcStatus").WithOAuthBearerToken(_token).GetAsync().ReceiveJson<PcStatuResult>();
 
-                httpCall.ExceptionHandled = false;
+                httpCall.ExceptionHandled = true;
             }
         }
 
@@ -51,7 +51,6 @@ namespace Controls.Net7.App
             while (await timer.WaitForNextTickAsync())
             {
                 PcStatuResult status =new PcStatuResult() ;
-                FlurlCall failedCall = null;
                 try
                 {
                     status = await (DefalutConfig.BaseUrl + "GetRedisPcStatus").WithOAuthBearerToken(_token).GetAsync().ReceiveJson<PcStatuResult>();
@@ -67,8 +66,8 @@ namespace Controls.Net7.App
             if (content.Text != null && content.Text.Contains('\n') && content.Text.Split('\n').Length > 20) content.Text = "";
                 var pcstauts =  status.Data;
                 if (pcstauts != null) {
-                        content.Text = pcstauts.PcStatu+"|"+pcstauts.PcCmd + "|" + pcstauts.PcName + "|" + pcstauts.PcLoginName + "|" + pcstauts.PcIp + "|" + pcstauts.Other + "\n" + content.Text;
-                    if (pcstauts.PcStatu == "关机")
+                        content.Text = pcstauts.PcStatu+"|"+pcstauts.PcCmd + "|" + pcstauts.PcName + "|" + pcstauts.TimeAdd + "|"+pcstauts.PcLoginName + "|" + pcstauts.PcIp + "|" + pcstauts.Time + "|" + pcstauts.Other +"\n" + content.Text;
+                    if (pcstauts.PcStatu == PcCmd.TurnOff)
                     {
                         imgpicstatus.Source = "state_3.png";
                         isopen = false;
@@ -91,7 +90,7 @@ namespace Controls.Net7.App
                     try
                     {
                         PcStatuResult ddd = await (DefalutConfig.BaseUrl + "SetRedisPcClose").WithOAuthBearerToken(_token).GetAsync().ReceiveJson<PcStatuResult>();
-                        if (ddd.Data.PcStatu == "关机")
+                        if (ddd.Data.PcStatu == PcCmd.TurnOff)
                         {
                             // await DisplayAlert("下发成功", "关机", "ok");
                         }
@@ -105,7 +104,7 @@ namespace Controls.Net7.App
                 try
                 {
                     ApiResult ddd = await (DefalutConfig.BaseUrl + "SetRedisPcOpen").WithOAuthBearerToken(_token).GetAsync().ReceiveJson<ApiResult>(); ;
-                    if ((ddd.Data as JToken).ToObject<PcStatus>().PcStatu== "开机")
+                    if ((ddd.Data as JToken).ToObject<PcStatus>().PcStatu== PcCmd.TurnOn)
                     {
                         //await DisplayAlert("下发成功", "开机", "ok"); 
                     }
@@ -127,6 +126,25 @@ namespace Controls.Net7.App
         private async void asdsd_TextChanged(object sender, TextChangedEventArgs e)
         {
             await (DefalutConfig.BaseUrl + "SetRedisPcOpenByName?deviceStatus=" + asdsd.Text).WithOAuthBearerToken(_token).GetStringAsync();
+        }
+
+        private async void Button_Clicked_1(object sender, EventArgs e)
+        {
+
+            if (int.TryParse(asdsd.Text, out int da))
+                await (DefalutConfig.BaseUrl + "SetRedisPcCmd").WithOAuthBearerToken(_token).PostJsonAsync(
+                    new PcStatus()
+                    {   PcIp="",
+                        Other = "",
+                        PcLoginName = "",
+                        PcName = "",
+                        TimeAdd = da,
+                        Time = DateTime.Now.ToString(),
+                        PcCmd = PcCmd.AddTime,
+                        PcStatu = PcCmd.TurnOn,
+                    }
+                    ); 
+
         }
     }
 }

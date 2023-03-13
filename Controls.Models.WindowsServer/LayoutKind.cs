@@ -75,77 +75,15 @@ namespace WindowApi
         {
             dd = GetLastInputTime();
             return true;
-                if(check_is_ready(dd)) return true; 
-            if (dd == 0)
-            {
-                for (int j = 0; j < checkTables.Count; j++)
-                    checkTables[j].IsAchieve = false;
-            }
-            return false;
+              //  if(check_is_ready(dd)) return true; 
+            //if (dd == 0)
+            //{
+            //    for (int j = 0; j < checkTables.Count; j++)
+            //        checkTables[j].IsAchieve = false;
+            //}
+            //return false;
          }
         #endregion
-        static bool  a,b,c,d,e,f,g,h,i,j,k,l,m,n =false;
-        public static bool lastinputinfi(out long dd) {
-            dd = LayoutKind.GetLastInputTime();
-       
-            //5小时
-            if (!a &&dd > 5 * 60 * 60 * 1000) {  a = true; return true; }
-            //4小时
-            if (!b && dd > 4 * 60 * 60 * 1000) { b = true; return true; }
-            //3小时
-            if (!c && dd > 3 * 60 * 60 * 1000) { c = true; return true; }
-            //2小时
-            if (!d && dd > 2 * 60 * 60 * 1000) { d = true; return true; }
-            //1小时
-            if (!e && dd > 60 * 60 * 1000) {  e = true; return true; }
-            //30分钟
-            if (!h && dd > 30 * 60 * 1000) { h = true; return true; }
-            //10分钟
-            if (!i && dd > 10 * 60 * 1000) { i = true; return true; }
-            //5分钟
-            if (!j && dd > 5 * 60 * 1000) { j = true; return true; }
-            //1分钟
-            if (!k && dd > 1 * 60 * 1000)
-            {
-                k = true;
-                return true;
-            }
-            if (!l  && dd > 30 * 1000)
-            {
-               
-                l = true;
-                return true;
-            }
-            if (!m && dd > 10 * 1000)
-            {
-                m = true;
-                return true;
-            }
-            if (!n && dd > 5 * 1000)
-            {
-                n = true;
-                return true;
-            }
-            if (dd == 0)
-            {
-                a = false;
-                b = false;
-                c = false;
-                d = false;
-                e = false;
-                f = false;
-                g = false;
-                h = false;
-                i = false;
-                j = false;
-                k = false;
-                l = false;
-                m = false;
-                n = false;
-            }
-           
-            return false;
-        }
         public static string GetInfor() {
           
             long dd;
@@ -166,10 +104,10 @@ namespace WindowApi
                 if (dd > 0 && dd > time) 
                 {
 
-                    //LayoutKind.SendEmailTo(LayoutKind.formatLongToTimeStr(dd));
-                    //File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + "执行关机\r\n");
-                    //Thread.Sleep(1000);
-                    //Process.Start("shutdown", "/s /t 0"); 
+                    LayoutKind.SendEmailTo("关机原因：未操作时长达到："+LayoutKind.formatLongToTimeStr(dd)+"关机");
+                    File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + "执行关机\r\n");
+                    Thread.Sleep(1000);
+                    Process.Start("shutdown", "/s /t 0");
                     return "执行关机;闲时时间：" + formatLongToTimeStr(dd) + "需闲时时间:" + hourtototal(hour) + "小时";
 
                 }
@@ -285,7 +223,51 @@ namespace WindowApi
             }
             return 0;
         }
+        public static int HttpPost2(string url, string sendData, out string reslut, string token = "")
+        {
+            reslut = "";
+            try
+            {
+                byte[] data = System.Text.Encoding.UTF8.GetBytes(sendData);
+                HttpWebRequest wbRequest = (HttpWebRequest)WebRequest.Create(url);  // 制备web请求
+                wbRequest.Proxy = null;     //现场测试注释掉也可以上传
+                wbRequest.Method = "POST";
+                wbRequest.ContentType = "application/json";
+                wbRequest.ContentLength = data.Length;
+                wbRequest.Headers.Add("Authorization", token);
 
+                //api/Token/GetToken
+                //#region //【1】获得请求流，OK
+                //Stream newStream = wbRequest.GetRequestStream();
+                //newStream.Write(data, 0, data.Length);
+                //newStream.Close();//关闭流
+                //newStream.Dispose();//释放流所占用的资源
+                //#endregion
+
+                #region //【2】将创建Stream流对象的过程写在using当中，会自动的帮助我们释放流所占用的资源。OK
+                using (Stream wStream = wbRequest.GetRequestStream())         //using(){}作为语句，用于定义一个范围，在此范围的末尾将释放对象。
+                {
+                    wStream.Write(data, 0, data.Length);
+                }
+                #endregion
+
+                //获取响应
+                HttpWebResponse wbResponse = (HttpWebResponse)wbRequest.GetResponse();
+                using (Stream responseStream = wbResponse.GetResponseStream())
+                {
+                    using (StreamReader sReader = new StreamReader(responseStream, Encoding.UTF8))      //using(){}作为语句，用于定义一个范围，在此范围的末尾将释放对象。
+                    {
+                        reslut = sReader.ReadToEnd();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                reslut = e.Message;     //输出捕获到的异常，用OUT关键字输出
+                return -1;              //出现异常，函数的返回值为-1
+            }
+            return 0;
+        }
 
         public static void SendEmailTo(string text)
         {

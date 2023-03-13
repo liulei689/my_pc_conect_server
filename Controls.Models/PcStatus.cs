@@ -6,13 +6,22 @@ namespace Controls.Models
 {
     public class PcStatus
     {
-        public string PcStatu { get; set; } = "开机";
-        public string PcCmd { get; set; } = "检查开机";
+        public PcCmd PcStatu { get; set; }
+        public PcCmd PcCmd { get; set; } 
+        public int TimeAdd { get; set; } 
 
-        public string PcIp { get; set; } = "127.0.0.1";
-        public string PcName { get; set; } = "";
-        public string PcLoginName { get; set; } = "";
-        public DateTime Time { get; set; }
-        public string Other { get; set; } = "";
+        public string PcIp { get; set; }
+        public string PcName { get; set; } 
+        public string PcLoginName { get; set; } 
+        public string Time { get; set; }
+        public string Other { get; set; } 
+    }
+    public enum PcCmd
+    {
+        Check,
+        ServerUpdate,
+        TurnOn,
+        TurnOff,
+        AddTime
     }
 }
