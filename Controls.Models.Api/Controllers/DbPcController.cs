@@ -2,6 +2,7 @@ using Controls.Models;
 using Controls.Net7.Api.Commons.Jwt;
 using Controls.Net7.Api.Model.Dto;
 using Controls.Net7.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Controls.Net7.Api.Controllers
@@ -9,9 +10,9 @@ namespace Controls.Net7.Api.Controllers
     /// <summary>
     /// 用户管理
     /// </summary>
-    [ApiController]
     [Route("[controller]")]
-    public class DbPcController : ControllerBase
+
+    public class DbPcController :  AppBaseController
     {
         private readonly ISqliteService _sqliteService;
 
@@ -24,16 +25,16 @@ namespace Controls.Net7.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("/AddUser")]
-        public Task<int> AddUser(UserDto userDto)=> _sqliteService.ActionUserTable(userDto, SqlAction.Add);
+        public async Task<ApiResult> AddUser(UserDto userDto)=> ResultOk(await _sqliteService.ActionUserTable(userDto, SqlAction.Add));
 
         [HttpPost("/UpdateUserPassword")]
-        public Task<int> UpdateUserPassword(User userDto) => _sqliteService.ActionUserTable(userDto, SqlAction.UpdatePassword);
+        public async Task<ApiResult> UpdateUserPassword(User userDto)=> ResultOk(await _sqliteService.ActionUserTable(userDto, SqlAction.UpdatePassword));
         [HttpPost("/UpdateUser")]
-        public Task<int> UpdateUser(UserDto userDto) => _sqliteService.ActionUserTable(userDto, SqlAction.Update);
+        public async Task<ApiResult> UpdateUser(UserDto userDto) => ResultOk(await _sqliteService.ActionUserTable(userDto, SqlAction.Update));
 
         [HttpPost("/DeleteUser")]
-        public Task<int> DeleteUser(string username) => _sqliteService.ActionUserTable(username, SqlAction.Delete);
+        public async Task<ApiResult> DeleteUser(string username) => ResultOk(await _sqliteService.ActionUserTable(username, SqlAction.Delete));
         [HttpPost("/SelectAllUser")]
-        public Task<IEnumerable<UserDto>> SelectAllUser() => _sqliteService.SelectUserAllAsync();
+        public async Task<ApiResult> SelectAllUser() => ResultOk(await _sqliteService.SelectUserAllAsync());
     }
 }

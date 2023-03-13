@@ -1,3 +1,4 @@
+using Controls.Models;
 using Controls.Net7.Api.Commons.Jwt;
 using Controls.Net7.Api.Untiys;
 using Microsoft.AspNetCore.Authorization;
@@ -8,10 +9,10 @@ namespace Controls.Net7.Api.Controllers
     /// <summary>
     /// 文件管理
     /// </summary>
-    [Authorize("公共接口")]
-    [ApiController]
     [Route("[controller]")]
-    public class FilePcController : ControllerBase
+    [Authorize("公共接口")]
+
+    public class FilePcController : AppBaseController
     {
         private readonly ILogger<FilePcController> _logger;
         private readonly IJWTManager _iJWTManager;
@@ -28,7 +29,7 @@ namespace Controls.Net7.Api.Controllers
         /// <returns></returns>
         [Route("UploadImage")]
         [HttpPost]
-        public async Task<IActionResult> ImageAsync(List<IFormFile> files,string filename)
+        public async Task<ApiResult> ImageAsync(List<IFormFile> files,string filename)
         {
             var filePath = FileHelper.GetBasePath();
             if (!System.IO.Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
@@ -46,7 +47,7 @@ namespace Controls.Net7.Api.Controllers
 
                 }
             }     
-            return new JsonResult(FileHelper.GetFilelist());
+            return ResultOk(FileHelper.GetFilelist());
         }
         /// <summary>
         /// 获取文件列表
@@ -54,7 +55,7 @@ namespace Controls.Net7.Api.Controllers
         /// <returns></returns>
         [Route("GetFileList")]
         [HttpPost]
-        public IActionResult GetFileListAsync()
+        public ApiResult GetFileListAsync()
         {
             //获取JWT
             string AuthorizationToken = HttpContext.Request.Headers["Authorization"].FirstOrDefault();
@@ -63,8 +64,8 @@ namespace Controls.Net7.Api.Controllers
             //解析JWT中的用户信息
             var u = _iJWTManager.SerializeJwt(JwtToken);
             var filePath = FileHelper.GetBasePath();
-            if (!System.IO.Directory.Exists(filePath)) return Ok(null);
-            return new JsonResult(FileHelper.GetFilelist());
+            if (!System.IO.Directory.Exists(filePath)) return ResultWarn("未找到网站根目录");
+            return ResultOk(FileHelper.GetFilelist());
         }
         /// <summary>
         /// 删除文件
@@ -73,7 +74,7 @@ namespace Controls.Net7.Api.Controllers
         /// <returns></returns>
         [Route("Delete")]
         [HttpPost]
-        public  IActionResult DeleteAsync(string filename)
+        public ApiResult DeleteAsync(string filename)
         {
             var filePath = FileHelper.GetBasePath();
             var filelist = Directory.GetFiles(filePath);
@@ -87,7 +88,7 @@ namespace Controls.Net7.Api.Controllers
                 }
                    
             }
-            return Ok(new { counts = counts, data = filelist });
+            return ResultOk(new { counts = counts, data = filelist });
         }
         /// <summary>
         /// 修改
@@ -97,7 +98,7 @@ namespace Controls.Net7.Api.Controllers
         /// <returns></returns>
         [Route("Update")]
         [HttpPost]
-        public IActionResult UpdateAsync(string oldfilename,string newfilename)
+        public ApiResult UpdateAsync(string oldfilename,string newfilename)
         {
             var filePath = FileHelper.GetBasePath();
             var filelist = Directory.GetFiles(filePath);
@@ -112,12 +113,8 @@ namespace Controls.Net7.Api.Controllers
                 }
             }
   
-            return new JsonResult(FileHelper.GetFilelist());
+            return ResultOk(FileHelper.GetFilelist());
         }
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
-        {
-            return id == 1 ? NoContent(): Ok("1212");
-        }
+
     }
 }
