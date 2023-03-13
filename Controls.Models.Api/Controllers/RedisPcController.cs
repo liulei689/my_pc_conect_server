@@ -33,41 +33,24 @@ namespace Controls.Net7.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("/GetRedisPcStatus")]
-        public ApiResult GetRedisPcStatus()
-        {
-            PcStatus status= JsonSerializer.Deserialize<PcStatus>(_redisService.Database.StringGet("家-台式电脑-状态"));
-          return ApiResult.OkData(status);
-        }
-
-        
+        public ApiResult GetRedisPcStatus()=>ApiResult.OkData(JsonSerializer.Deserialize<PcStatus>(_redisService.Database.StringGet("家-台式电脑-状态")));       
         /// <summary>
         /// 关机
         /// </summary>
         /// <returns></returns>
         [HttpGet("/SetRedisPcClose")]
-        public ApiResult SetRedisPcClose()
-        {
-          return  Common.SetPcSatusReponse("关机",HttpContext,_iJWTManager, Request,_redisService);
-        }
+        public ApiResult SetRedisPcClose()=> Common.SetPcSatusReponse("关机",HttpContext,_iJWTManager, Request,_redisService);
         /// <summary>
         /// 开机
         /// </summary>
         /// <returns></returns>
         [HttpGet("/SetRedisPcOpen")]
-        public ApiResult SetRedisPcOpen()
-        {
-            return Common.SetPcSatusReponse("开机", HttpContext, _iJWTManager, Request, _redisService);
-
-        }
+        public ApiResult SetRedisPcOpen()=>Common.SetPcSatusReponse("开机", HttpContext, _iJWTManager, Request, _redisService);
         /// <summary>
         /// 开机指定机器
         /// </summary>
         /// <returns></returns>
         [HttpGet("/SetRedisPcCmd")]
-        public ApiResult SetRedisPcCmd([FromQuery]string cmd)
-        {
-            return Common.SetPcSatusReponse("开机", HttpContext, _iJWTManager, Request, _redisService,cmd);
-
-        }
+        public ApiResult SetRedisPcCmd([FromQuery]string cmd) => Common.SetPcSatusReponse("开机", HttpContext, _iJWTManager, Request, _redisService,cmd);
     }
 }
