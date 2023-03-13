@@ -1,4 +1,6 @@
-﻿namespace Controls.Models
+﻿using System;
+
+namespace Controls.Models
 {
     public class BaseResult 
     {
@@ -184,6 +186,8 @@
         /// <returns></returns>
         public static ApiResult Warn(string message, object data)
             => Result(ApiResultCodeEnum.Warn, message, data);
+
+       
 
         #endregion
     }

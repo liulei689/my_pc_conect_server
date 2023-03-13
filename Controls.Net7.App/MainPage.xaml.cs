@@ -28,7 +28,21 @@ namespace Controls.Net7.App
             });
 #endif
             mainPage = this;
+            FlurlHttp.GlobalSettings.OnError = MyFlurlErrorHandler;
         }
+
+        private async void MyFlurlErrorHandler(FlurlCall httpCall)
+        {
+            if (httpCall.Response.StatusCode == 401)       //401
+            {
+                var repons = await(DefalutConfig.BaseUrl + "api/Token/GetToken").PostJsonAsync(new { Password = passwword, UserName = username }).ReceiveJson<ApiResult>();
+                _token = repons.Data.ToString().Replace("Bearer ", "");
+                 await (DefalutConfig.BaseUrl + "GetRedisPcStatus").WithOAuthBearerToken(_token).GetAsync().ReceiveJson<PcStatuResult>();
+
+                httpCall.ExceptionHandled = false;
+            }
+        }
+
         bool isopen = false;
         public static string _token = "";
         private async void ContentPage_Loaded(object sender, EventArgs e)
@@ -36,30 +50,21 @@ namespace Controls.Net7.App
             using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(500));
             while (await timer.WaitForNextTickAsync())
             {
-                string messages;
                 PcStatuResult status =new PcStatuResult() ;
+                FlurlCall failedCall = null;
                 try
                 {
                     status = await (DefalutConfig.BaseUrl + "GetRedisPcStatus").WithOAuthBearerToken(_token).GetAsync().ReceiveJson<PcStatuResult>();
-                }
-                catch (Exception ex)
+                 }
+                catch(FlurlHttpException ex)
                 {
-                    if (ex.Message.Contains("Unauthorized"))
-                    {
-                        try
-                        {
-                            var repons = await (DefalutConfig.BaseUrl + "api/Token/GetToken").PostJsonAsync(new { Password = passwword, UserName = username }).ReceiveJson<ApiResult>();
-                            _token = repons.Data.ToString().Replace("Bearer ", "");
-                            status = await (DefalutConfig.BaseUrl + "GetRedisPcStatus").WithOAuthBearerToken(_token).GetAsync().ReceiveJson<PcStatuResult>();
-                        }
-                        catch (Exception ed)
-                        {
-                            messages = ed.Message;
-                        }
-                    }
-                    messages = ex.Message + _token;
+                    var dd = await ex.GetResponseJsonAsync<ApiResult>(); ;
                 }
-                if (content.Text != null && content.Text.Contains('\n') && content.Text.Split('\n').Length > 20) content.Text = "";
+              
+                {
+            }
+
+            if (content.Text != null && content.Text.Contains('\n') && content.Text.Split('\n').Length > 20) content.Text = "";
                 var pcstauts =  status.Data;
                 if (pcstauts != null) {
                         content.Text = pcstauts.PcStatu+"|"+pcstauts.PcCmd + "|" + pcstauts.PcName + "|" + pcstauts.PcLoginName + "|" + pcstauts.PcIp + "|" + pcstauts.Other + "\n" + content.Text;

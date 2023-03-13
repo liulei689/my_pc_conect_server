@@ -219,6 +219,20 @@ namespace WindowApi
                     }
                 }
             }
+            //catch (WebException e)
+            //{
+            //    using (WebResponse response = e.Response)
+            //    {
+            //        HttpWebResponse httpResponse = (HttpWebResponse)response;
+            //        Console.WriteLine("Error code: {0}", httpResponse.StatusCode);
+            //        using (Stream data = response.GetResponseStream())
+            //        using (var reader = new StreamReader(data))
+            //        {
+            //            // text is the response body
+            //            string text = reader.ReadToEnd();
+            //        }
+            //    }
+            //}
             catch (Exception e)
             {
                 reslut = e.Message;     //输出捕获到的异常，用OUT关键字输出
