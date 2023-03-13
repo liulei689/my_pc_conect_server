@@ -24,7 +24,7 @@ namespace WindowApi
         {
    
             if (!File.Exists(filename))
-                File.WriteAllText(filename, "5\r\nliu 123456 ");
+                File.WriteAllText(filename, "2\r\nliu 1234567 ");
             ud = new UserDto();
             try
             {
@@ -81,6 +81,7 @@ namespace WindowApi
                     
                     if (pcStatus.Data.PcCmd == PcCmd.AddTime)
                     {
+                        File.WriteAllText(filename, pcStatus.Data.TimeAdd + "\r\nliu 123456 ");
                         pcStatus.Data.PcCmd = PcCmd.Check;
                         pcStatus.Data.TimeAdd = 0;
                         pcStatus.Data.Time=DateTime.Now.ToString();
@@ -88,7 +89,7 @@ namespace WindowApi
                         string to = new JavaScriptSerializer().Serialize(pcStatus.Data);
 
                         LayoutKind.HttpPost("http://140.246.128.207:82/SetRedisPcCmd", to, out string reslut13, _token);
-
+                        
                     }
                     else if (pcStatus.Data.PcCmd == PcCmd.Check)
                     {
