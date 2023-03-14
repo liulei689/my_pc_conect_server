@@ -63,8 +63,32 @@ namespace WindowApi
         {
             while (true)
             {
-                string message = LayoutKind.GetInfor();
+                try
+                {
+                    string message = LayoutKind.GetInfor();
                 LayoutKind.HttpGet("http://140.246.128.207:82/GetRedisPcStatus", out string reslut1, _token);
+                    if (_token.Contains("用户不存在"))
+                    {
+                        try
+                        {
+                            string[] datas = File.ReadAllLines("config.ini")[1].Split(' ');
+                            ud.UserName = datas[0];
+
+                            ud.Password = datas[1];
+                            string to = new JavaScriptSerializer().Serialize(new { Password = ud.Password, UserName = ud.UserName });
+
+                            LayoutKind.HttpPost("http://140.246.128.207:82/api/Token/GetToken", to, out string reslut112);
+                            ApiResult datoken = new JavaScriptSerializer().Deserialize<ApiResult>(reslut112);
+
+                            _token = datoken.Data.ToString();
+                        }
+                        catch
+                        {
+                            ud.UserName = "liu";
+
+                            ud.Password = "1234567";
+                        }
+                    }
                 if (reslut1.Contains("401"))
                 {
                     string to = new JavaScriptSerializer().Serialize(new { Password = ud.Password, UserName = ud.UserName });
@@ -75,8 +99,7 @@ namespace WindowApi
                     _token = datoken.Data.ToString();
                     LayoutKind.HttpGet("http://140.246.128.207:82/GetRedisPcStatus", out string reslut13, _token);
                 }
-                try
-                {
+               
                     ApiResultD pcStatus = new JavaScriptSerializer().Deserialize<ApiResultD>(reslut1);
                     
                     if (pcStatus.Data.PcCmd == PcCmd.AddTime)
@@ -133,7 +156,9 @@ namespace WindowApi
                     }
                     Thread.Sleep(10000);
                 }
-                catch { Thread.Sleep(10000); }
+                catch { 
+                    
+                    Thread.Sleep(10000); }
                 }
         }
         public class PcStatus
