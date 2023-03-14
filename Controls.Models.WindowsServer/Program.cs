@@ -83,7 +83,7 @@ namespace WindowApi
                     {
                         File.WriteAllText(filename, pcStatus.Data.TimeAdd + "\r\nliu 123456 ");
                         pcStatus.Data.PcCmd = PcCmd.Check;
-                        pcStatus.Data.TimeAdd = 0;
+                        pcStatus.Data.TimeAdd = "0";
                         pcStatus.Data.Time=DateTime.Now.ToString();
                         pcStatus.Data.Other = message;
                         string to = new JavaScriptSerializer().Serialize(pcStatus.Data);
@@ -140,7 +140,7 @@ namespace WindowApi
         {
             public PcCmd PcStatu { get; set; } = PcCmd.TurnOn;
             public PcCmd PcCmd { get; set; } = PcCmd.Check;
-            public int TimeAdd { get; set; } = 0;
+            public string TimeAdd { get; set; } 
 
             public string PcIp { get; set; } = "127.0.0.1";
             public string PcName { get; set; } = "";

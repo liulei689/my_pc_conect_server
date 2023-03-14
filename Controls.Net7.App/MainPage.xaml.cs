@@ -131,14 +131,14 @@ namespace Controls.Net7.App
         private async void Button_Clicked_1(object sender, EventArgs e)
         {
 
-            if (int.TryParse(asdsd.Text, out int da))
+            if (double.TryParse(asdsd.Text, out double da))
                 await (DefalutConfig.BaseUrl + "SetRedisPcCmd").WithOAuthBearerToken(_token).PostJsonAsync(
                     new PcStatus()
                     {   PcIp="",
                         Other = "",
                         PcLoginName = "",
                         PcName = "",
-                        TimeAdd = da,
+                        TimeAdd = da.ToString(),
                         Time = DateTime.Now.ToString(),
                         PcCmd = PcCmd.AddTime,
                         PcStatu = PcCmd.TurnOn,

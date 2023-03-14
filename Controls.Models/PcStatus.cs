@@ -8,7 +8,7 @@ namespace Controls.Models
     {
         public PcCmd PcStatu { get; set; }
         public PcCmd PcCmd { get; set; } 
-        public int TimeAdd { get; set; } 
+        public string TimeAdd { get; set; } 
 
         public string PcIp { get; set; }
         public string PcName { get; set; } 
