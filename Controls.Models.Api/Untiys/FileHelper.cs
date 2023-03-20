@@ -18,7 +18,7 @@ namespace Controls.Net7.Api.Untiys
             for (int i = 0; i < filelist.Length; i++)
             {
                 ResponseFile responseFileList = new ResponseFile();
-                responseFileList.FileUrl = "http://140.246.128.207:82/" + filelist[i].Replace(filePath, "").Replace("\\", "");
+                responseFileList.FileUrl = "http://124.221.160.244/" + filelist[i].Replace(filePath, "").Replace("\\", "");
                 responseFileList.CreateTime = new FileInfo(filelist[i]).CreationTime; ;
                 responseFileList.FileName = Path.GetFileName(filelist[i]);
                 lists.Add(responseFileList);
