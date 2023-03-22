@@ -39,15 +39,15 @@ namespace WindowApi
 
                 ud.Password = "1234567";
             }
-            LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpen", out string reslut, _token);           
+            LayoutKind.HttpGet("http://124.221.160.244/SetRedisPcOpen", out string reslut, _token);           
            
                 if (reslut.Contains("401"))
                 {
                 string to = new JavaScriptSerializer().Serialize(new { Password = ud.Password, UserName = ud.UserName });
 
-                LayoutKind.HttpPost("http://140.246.128.207:82/api/Token/GetToken", to, out string reslut112);
+                LayoutKind.HttpPost("http://124.221.160.244/api/Token/GetToken", to, out string reslut112);
                     _token = reslut112;
-                    LayoutKind.HttpGet("http://140.246.128.207:82/SetRedisPcOpen", out string reslut445, _token);
+                    LayoutKind.HttpGet("http://124.221.160.244/SetRedisPcOpen", out string reslut445, _token);
               
 
             }
@@ -63,20 +63,43 @@ namespace WindowApi
         {
             while (true)
             {
-                string message = LayoutKind.GetInfor();
-                LayoutKind.HttpGet("http://140.246.128.207:82/GetRedisPcStatus", out string reslut1, _token);
+                try
+                {
+                    string message = LayoutKind.GetInfor();
+                LayoutKind.HttpGet("http://124.221.160.244/GetRedisPcStatus", out string reslut1, _token);
+                    if (_token.Contains("用户不存在"))
+                    {
+                        try
+                        {
+                            string[] datas = File.ReadAllLines("config.ini")[1].Split(' ');
+                            ud.UserName = datas[0];
+
+                            ud.Password = datas[1];
+                            string to = new JavaScriptSerializer().Serialize(new { Password = ud.Password, UserName = ud.UserName });
+
+                            LayoutKind.HttpPost("http://124.221.160.244/api/Token/GetToken", to, out string reslut112);
+                            ApiResult datoken = new JavaScriptSerializer().Deserialize<ApiResult>(reslut112);
+
+                            _token = datoken.Data.ToString();
+                        }
+                        catch
+                        {
+                            ud.UserName = "liu";
+
+                            ud.Password = "1234567";
+                        }
+                    }
                 if (reslut1.Contains("401"))
                 {
                     string to = new JavaScriptSerializer().Serialize(new { Password = ud.Password, UserName = ud.UserName });
 
-                    LayoutKind.HttpPost("http://140.246.128.207:82/api/Token/GetToken", to, out string reslut112);
+                    LayoutKind.HttpPost("http://124.221.160.244/api/Token/GetToken", to, out string reslut112);
                     ApiResult datoken = new JavaScriptSerializer().Deserialize<ApiResult>(reslut112);
 
                     _token = datoken.Data.ToString();
-                    LayoutKind.HttpGet("http://140.246.128.207:82/GetRedisPcStatus", out string reslut13, _token);
+                    LayoutKind.HttpGet("http://124.221.160.244/GetRedisPcStatus", out string reslut13, _token);
                 }
-                try
-                {
+               
                     ApiResultD pcStatus = new JavaScriptSerializer().Deserialize<ApiResultD>(reslut1);
                     
                     if (pcStatus.Data.PcCmd == PcCmd.AddTime)
@@ -88,7 +111,7 @@ namespace WindowApi
                         pcStatus.Data.Other = message;
                         string to = new JavaScriptSerializer().Serialize(pcStatus.Data);
 
-                        LayoutKind.HttpPost("http://140.246.128.207:82/SetRedisPcCmd", to, out string reslut13, _token);
+                        LayoutKind.HttpPost("http://124.221.160.244/SetRedisPcCmd", to, out string reslut13, _token);
                         
                     }
                     else if (pcStatus.Data.PcCmd == PcCmd.Check)
@@ -98,7 +121,7 @@ namespace WindowApi
                         pcStatus.Data.Time=DateTime.Now.ToString();   
                         string to2 = new JavaScriptSerializer().Serialize(pcStatus.Data);
 
-                        LayoutKind.HttpPost("http://140.246.128.207:82/SetRedisPcCmd", to2, out string reslut134, _token);
+                        LayoutKind.HttpPost("http://124.221.160.244/SetRedisPcCmd", to2, out string reslut134, _token);
 
                     }
 
@@ -133,7 +156,9 @@ namespace WindowApi
                     }
                     Thread.Sleep(10000);
                 }
-                catch { Thread.Sleep(10000); }
+                catch { 
+                    
+                    Thread.Sleep(10000); }
                 }
         }
         public class PcStatus
@@ -203,7 +228,7 @@ namespace WindowApi
         }
         #region 文件同步
         public static void Tongbu() {
-            LayoutKind.HttpPost("http://140.246.128.207:82/FilePc/GetFileList", "", out string reslutf, _token);
+            LayoutKind.HttpPost("http://124.221.160.244/FilePc/GetFileList", "", out string reslutf, _token);
             var value2 = new JavaScriptSerializer().Deserialize<ApiResultF>(reslutf);
         
             ResponseFileList value = value2.Data;

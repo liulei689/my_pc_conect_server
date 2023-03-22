@@ -6,6 +6,6 @@ namespace Controls.Models
 {
     public static class DefalutConfig
     {
-        public static readonly string BaseUrl = "http://140.246.128.207:82/";
+        public static readonly string BaseUrl = "http://124.221.160.244/";
     }
 }

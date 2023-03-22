@@ -29,7 +29,7 @@ public partial class FileManger : ContentPage
 
         if (res != null)
         {
-            string url = "http://140.246.128.207:82/FilePc/UploadImage?filename=" + picker.SelectedItem.ToString();
+            string url = "http://124.221.160.244/FilePc/UploadImage?filename=" + picker.SelectedItem.ToString();
             var ls =res.ToList();
             for (int m = 0; m < ls.Count; m++)
             {
@@ -76,7 +76,7 @@ public partial class FileManger : ContentPage
     private async void ContentPage_Loaded(object sender, EventArgs e)
     {
         Filelist.IsRefreshing = true;
-        string url = "http://140.246.128.207:82/FilePc/GetFileList";
+        string url = "http://124.221.160.244/FilePc/GetFileList";
         var resp = await url.WithOAuthBearerToken(MainPage._token).PostAsync().ReceiveJson<ApiResult>();
         Filelist.ItemsSource = (resp.Data as JToken).ToObject<ResponseFileList>().FileList;
         Filelist.IsRefreshing = false;
@@ -106,7 +106,7 @@ public partial class FileManger : ContentPage
             {              
                 if (sd != null)
                 {
-                    string url = "http://140.246.128.207:82/FilePc/Delete?filename=" + sd.FileName;
+                    string url = "http://124.221.160.244/FilePc/Delete?filename=" + sd.FileName;
                     var resp = await url.WithOAuthBearerToken(MainPage._token).PostAsync().ReceiveString();
                     ContentPage_Loaded(null, null);
                 }
@@ -116,7 +116,7 @@ public partial class FileManger : ContentPage
             string result = await DisplayPromptAsync("修改","修改中...", placeholder: sd.FileName,initialValue: sd.FileName,accept:"确定",cancel:"取消");
             if (result != "" && result.Contains("."))
             {
-                string url = $"http://140.246.128.207:82/FilePc/Update?oldfilename={sd.FileName}&newfilename={result}";
+                string url = $"http://124.221.160.244/FilePc/Update?oldfilename={sd.FileName}&newfilename={result}";
                 var resp = await url.WithOAuthBearerToken(MainPage._token).PostAsync().ReceiveJson<ApiResult>(); ;
                 Filelist.ItemsSource = (resp.Data as JToken).ToObject<ResponseFileList>().FileList;
                 Filelist.IsRefreshing = false;
