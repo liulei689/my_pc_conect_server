@@ -28,6 +28,8 @@ namespace Controls.Models
         public int ReadCount { get; set; } = 0;
         [Description("代码")]
         public string Code { get; set; } = "";
+        [Description("访问时间")]
+        public string ReadTime { get; set; } = "";
 
     }
 }

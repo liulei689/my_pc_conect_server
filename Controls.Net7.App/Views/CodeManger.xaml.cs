@@ -43,6 +43,7 @@ public partial class CodeManger : ContentPage
     {
 
         var sd = Filelist.SelectedItem as Codess;
+        sd.ReadTime = DateTime.Now.ToString();
         sd.ReadCount++;
         var resp2 = await "updatedata".GetUrl().PostJsonAsync(sd).ReceiveString();
 
