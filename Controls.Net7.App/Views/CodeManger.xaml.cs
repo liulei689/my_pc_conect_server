@@ -41,7 +41,11 @@ public partial class CodeManger : ContentPage
 
     private async void Filelist_ItemTapped(object sender, ItemTappedEventArgs e)
     {
+
         var sd = Filelist.SelectedItem as Codess;
+        sd.ReadCount++;
+        var resp2 = await "updatedata".GetUrl().PostJsonAsync(sd).ReceiveString();
+
         await Navigation.PushAsync(new CodePage(sd));
     }
     public async void update(UserDto o) {
