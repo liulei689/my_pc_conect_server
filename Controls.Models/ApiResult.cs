@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Controls.Models
 {
@@ -13,6 +14,10 @@ namespace Controls.Models
     public class PcStatuResult:BaseResult
     {
         public PcStatus Data { get; set; }
+    }
+    public class CodesResult : BaseResult
+    {
+        public List<Codess>? Data { get; set; } 
     }
     /// <summary>
     /// Api 消息返回类基础模板

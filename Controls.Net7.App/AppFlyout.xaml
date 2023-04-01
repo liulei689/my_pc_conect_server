@@ -35,6 +35,11 @@
             Route="用户管理" />
     </FlyoutItem>
 
-
+    <FlyoutItem Title="代码管理" >
+        <ShellContent
+            Title="代码管理"
+            ContentTemplate="{DataTemplate lv:CodeManger}"
+            Route="代码管理" />
+    </FlyoutItem>
 
 </Shell>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Controls.Net7.App.Views.CodeManger"
+             Loaded="ContentPage_Loaded"
+             Title="代码库管理">
+    <ScrollView>
+        <VerticalStackLayout>
+            <HorizontalStackLayout>
+                <Label x:Name="status" />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Grid Padding="10">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+             
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Margin="0,0,10,0" Text="用处" FontAttributes="Bold" />
+                    <!--<Label Grid.Column="1"  Margin="0,0,10,0" Text="细节" FontAttributes="Bold" />
+                    <Label Grid.Column="2"  Margin="10,0,0,10" Text="更新" FontAttributes="Bold"></Label>-->
+                    <Label Grid.Column="1"  Margin="0,0,10,0" Text="创建" FontAttributes="Bold" />
+                    <Label Grid.Column="2"  Margin="10,0,0,10" Text="阅读" FontAttributes="Bold"></Label>
+                </Grid>
+            </HorizontalStackLayout>
+            <ListView x:Name="Filelist"  IsPullToRefreshEnabled="true" IsRefreshing="True"  Refreshing="Filelist_Refreshing" ItemTapped="Filelist_ItemTapped">
+
+        
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="10">
+               
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="150" />
+                    
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Margin="0,0,10,0" Text="{Binding Use}"/>
+                                <!--<Label Grid.Column="1"  Margin="0,0,10,0" Text="{Binding UseDetail}" FontAttributes="Bold" />-->
+                                <!--<Label Grid.Column="2"  Margin="10,0,0,10" Text="{Binding TimeUpate}" FontAttributes="Bold"/>-->
+                                <Label Grid.Column="1"   Margin="0,0,10,0" Text="{Binding CreateTime}" FontAttributes="Bold"/>
+                                <Label Grid.Column="2" Margin="0,0,10,0" Text="{Binding ReadCount}" FontAttributes="Bold"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
