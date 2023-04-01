@@ -90,6 +90,9 @@
 	  <MauiXaml Update="Views\CodeManger.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\CodePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\UserManger.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

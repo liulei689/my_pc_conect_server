@@ -6,16 +6,20 @@
              Title="代码库管理">
     <ScrollView>
         <VerticalStackLayout>
-            <HorizontalStackLayout>
+            <VerticalStackLayout>
+                <Border Stroke="Gray"
+                    WidthRequest="380"
+                    Padding="16,8"
+                    HorizontalOptions="Center">
+                    <Entry Text=""  x:Name="search" TextChanged="search_TextChanged"/>
+                </Border>
                 <Label x:Name="status" />
-            </HorizontalStackLayout>
+            </VerticalStackLayout>
             <HorizontalStackLayout>
                 <Grid Padding="10">
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150" />
                         <ColumnDefinition Width="150" />
-             
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" Margin="0,0,10,0" Text="用处" FontAttributes="Bold" />
