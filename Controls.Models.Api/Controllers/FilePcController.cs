@@ -31,22 +31,27 @@ namespace Controls.Net7.Api.Controllers
         [HttpPost]
         public async Task<ApiResult> ImageAsync(List<IFormFile> files,string filename)
         {
-            var filePath = FileHelper.GetBasePath();
-            if (!System.IO.Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
-            foreach (var formFile in files)
+            try
             {
-                if (formFile.Length > 0)
+                var filePath = FileHelper.GetBasePath();
+                if (!System.IO.Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
+                foreach (var formFile in files)
                 {
-                    if (filename == "原名") filename = Path.GetFileNameWithoutExtension(formFile.FileName);
-                    var path = Path.Combine(filePath, filename+System.DateTime.Now.ToString("yyyy-MM-dd-HHmmss") + Path.GetExtension(formFile.FileName.ToString()));
-
-                    using (var stream = System.IO.File.Create(path))
+                    if (formFile.Length > 0)
                     {
-                        await formFile.CopyToAsync(stream);
-                    }
+                        if (filename == "原名") filename = Path.GetFileNameWithoutExtension(formFile.FileName);
+                        var path = Path.Combine(filePath, filename + System.DateTime.Now.ToString("yyyy-MM-dd-HHmmss") + Path.GetExtension(formFile.FileName.ToString()));
 
+                        using (var stream = System.IO.File.Create(path))
+                        {
+                            await formFile.CopyToAsync(stream);
+                        }
+
+                    }
                 }
-            }     
+              
+            }
+            catch(Exception e) { ResultWarn(e.Message); }
             return ResultOk(FileHelper.GetFilelist());
         }
         /// <summary>
