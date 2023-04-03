@@ -9,26 +9,40 @@ namespace Controls.Net7.App.Views;
 
 public partial class CodeAdd : ContentPage
 {
-
-	public CodeAdd(Codess dto=null)
+    public int _counts = 0;
+	public CodeAdd(int counts,Codess dto=null)
 	{
         InitializeComponent();
-        dto.CreateTime=DateTime.Now.ToString("yyyy/M/d H:m:ss",DateTimeFormatInfo.InvariantInfo);
-        dto.TimeUpate=dto.CreateTime;
-        dto.ReadCount=0;
-        dto.ReadTime=dto.CreateTime;
-        dto.From = "»¥ÁªÍø";
-        dto.Technical = "»¥ÁªÍø";
-        dto.Code = "";
-        
-        Codessm.Root.BindingContext = dto; 
+        _counts = counts;
     }
 
     private async void Button_Clicked(object sender, EventArgs e)
-    {
-       var codes= Codessm.Root.BindingContext as Codess;
-        codes._id = codes.Use;
-       await "adddata".GetUrl().PostJsonAsync(codes).ReceiveString();
+    { 
+        var dto =new Codess();
+        dto.CreateTime = DateTime.Now.ToString("yyyy/M/d H:m:ss", DateTimeFormatInfo.InvariantInfo);
+        dto.TimeUpate = dto.CreateTime;
+        dto.ReadCount = 0;
+        dto.ReadTime = dto.CreateTime;
+        dto.From = "»¥ÁªÍø";
+        dto.Technical = "»¥ÁªÍø";
+        dto.Code = Code.Text;
+        dto.Use=Use.Text;
+        dto.UseDetail = UseDetail.Text; 
+        dto._id = (_counts+1).ToString();
+        await "adddata".GetUrl().PostJsonAsync(dto).ReceiveString();
        await Navigation.PopAsync();
+       
+    }
+
+    private async void Use_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        UseDetail.Text=Use.Text;
+        if (Clipboard.Default.HasText)
+        {
+            Code.Text = await Clipboard.Default.GetTextAsync();
+            //await ClearClipboard();
+        }
+        else
+            Code.Text = "";
     }
 }

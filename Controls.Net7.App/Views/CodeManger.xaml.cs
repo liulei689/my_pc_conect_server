@@ -2,7 +2,6 @@ using Controls.Models;
 using Controls.Net7.Api.Model.Dto;
 using Controls.Net7.App.Uintitys;
 using Flurl.Http;
-using System.Linq;
 
 namespace Controls.Net7.App.Views;
 
@@ -14,13 +13,15 @@ public partial class CodeManger : ContentPage
 		InitializeComponent();
     }
     public List<Codess> codesses;
+    public int counts = 0;
 
     private async void ContentPage_Loaded(object sender, EventArgs e)
     {
         Filelist.IsRefreshing = true;
         var resp = await "alldata".GetUrl().PostAsync().ReceiveJson<CodesResult>();
-        Filelist.ItemsSource = resp.Data.OrderByDescending(o=>o.ReadCount);
-        codesses=resp.Data;
+        Filelist.ItemsSource = resp.Data.OrderByDescending(o=>o.ReadCount);        
+        codesses =resp.Data;
+        counts = resp.Data.Count;
         DateTime timetoday = DateTime.Today.AddHours(-12);
         DateTime timelastweek = DateTime.Today.AddDays(-7);
         DateTime timelastmons = DateTime.Today.AddMonths(-1);
@@ -62,6 +63,6 @@ public partial class CodeManger : ContentPage
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new CodeAdd(new Codess()));
+        await Navigation.PushAsync(new CodeAdd(counts,new Codess()));
     }
 }

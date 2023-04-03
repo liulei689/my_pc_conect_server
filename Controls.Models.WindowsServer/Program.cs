@@ -21,8 +21,7 @@ namespace WindowApi
         public static string _token="";
         public static UserDto ud=null;
         static void Main(string[] args)
-        {
-   
+        {            
             if (!File.Exists(filename))
                 File.WriteAllText(filename, "2\r\nliu 1234567 ");
             ud = new UserDto();

@@ -4,15 +4,16 @@
              x:Class="Controls.Net7.App.Views.CodeAdd"
              >
     <VerticalStackLayout>
-        <TableView  Intent="Form"  IsVisible="true" x:Name="Codessm">
-            <TableRoot>
-                <TableSection>
-                    <EntryCell Label="用处" Text="{Binding Use}"/>
-                    <EntryCell Label="用处细节" Text="{Binding UseDetail}"/>
-                    <EntryCell Label="代码" Text="{Binding Code}"/>
-                </TableSection>
-            </TableRoot>
-        </TableView>
+        <HorizontalStackLayout>
+            <Editor x:Name="Use" Placeholder="用处"
+        HeightRequest="60" WidthRequest="330" TextChanged="Use_TextChanged"/>
+            <Button Text="粘贴"/>
+        </HorizontalStackLayout>
+        <Editor x:Name="UseDetail" Placeholder="用处细节"
+        HeightRequest="60"/>
         <Button Text="确定"  Clicked="Button_Clicked"></Button>
+
+        <Editor  x:Name="Code"  Placeholder="代码"
+        HeightRequest="700"/>
     </VerticalStackLayout>
 </ContentPage>
