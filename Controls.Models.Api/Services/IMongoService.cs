@@ -9,5 +9,7 @@ namespace Controls.Net7.Api.Services
     {
         IEnumerable<T> GetMany<T>(string collName, FilterDefinition<T> filter);
         Task<T> UpdateOneAsync<T>(string collName, Expression<Func<T, bool>> filter, UpdateDefinition<T> update);
+        void InsertOne<T>(string collection, T t);
+        long Delete<T>(string collName, Expression<Func<T, bool>> predicate);
     }
 }

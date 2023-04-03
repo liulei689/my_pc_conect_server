@@ -59,4 +59,9 @@ public partial class CodeManger : ContentPage
         var ds= codesses.FindAll(o => o.Use.Contains((sender as Entry).Text));
         Filelist.ItemsSource = ds;
     }
+
+    private async void Button_Clicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new CodeAdd(new Codess()));
+    }
 }

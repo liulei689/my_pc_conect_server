@@ -78,6 +78,9 @@
 	  <Compile Update="Views\CodeManger.xaml.cs">
 	    <DependentUpon>CodeManger.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\CodeAdd.xaml.cs">
+	    <DependentUpon>CodeAdd.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\UserManger.xaml.cs">
 	    <DependentUpon>UserManger.xaml</DependentUpon>
 	  </Compile>
@@ -91,6 +94,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\CodePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\CodeAdd.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\UserManger.xaml">
