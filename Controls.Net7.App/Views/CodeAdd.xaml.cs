@@ -9,8 +9,8 @@ namespace Controls.Net7.App.Views;
 
 public partial class CodeAdd : ContentPage
 {
-    public int _counts = 0;
-	public CodeAdd(int counts,Codess dto=null)
+    public string _counts ;
+	public CodeAdd(string counts,Codess dto=null)
 	{
         InitializeComponent();
         _counts = counts;
@@ -19,7 +19,7 @@ public partial class CodeAdd : ContentPage
     private async void Button_Clicked(object sender, EventArgs e)
     { 
         var dto =new Codess();
-        dto.CreateTime = DateTime.Now.ToString("yyyy/M/d H:m:ss", DateTimeFormatInfo.InvariantInfo);
+        dto.CreateTime = DateTime.Now.ToString("yyyy/M/d H:mm:ss", DateTimeFormatInfo.InvariantInfo);
         dto.TimeUpate = dto.CreateTime;
         dto.ReadCount = 0;
         dto.ReadTime = dto.CreateTime;
@@ -28,9 +28,15 @@ public partial class CodeAdd : ContentPage
         dto.Code = Code.Text;
         dto.Use=Use.Text;
         dto.UseDetail = UseDetail.Text; 
-        dto._id = (_counts+1).ToString();
-        await "adddata".GetUrl().PostJsonAsync(dto).ReceiveString();
-       await Navigation.PopAsync();
+        dto._id = (int.Parse(_counts)+1).ToString();
+        try
+        {
+            await "adddata".GetUrl().PostJsonAsync(dto).ReceiveString();
+            await Navigation.PopAsync();
+        }
+        catch (Exception ex) { 
+        }
+  
        
     }
 
