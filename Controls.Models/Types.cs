@@ -11,6 +11,7 @@ namespace Controls.Models
         Update,
         Select,
         UpdatePassword,
-        UpdateRole
+        UpdateRole,
+        deleteall
     }
 }

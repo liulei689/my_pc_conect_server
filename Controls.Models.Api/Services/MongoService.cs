@@ -367,6 +367,7 @@ public class MongoService : IMongoService
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="collName">表名</param>
+    /// <param name="value">表名</param>
     /// <param name="filter">条件</param>
     /// <param name="update">更新后的数据</param>
     /// <returns></returns>

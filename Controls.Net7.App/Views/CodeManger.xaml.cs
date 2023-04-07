@@ -64,7 +64,7 @@ public partial class CodeManger : ContentPage
     {
         counts= codesses.Max(o => int.Parse(o._id)).ToString();
          await Navigation.PushAsync(new CodeAdd(counts,new Codess()));
-        int dd = 1;
+       
     }
 
 

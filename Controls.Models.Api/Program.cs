@@ -45,6 +45,8 @@ else
 builder.Services.AddSingleton<IRedisService, RedisService>(serviceProvider => new RedisService(builder.Configuration.GetSection("redis")["ConnectionString"]));
 builder.Services.AddSingleton<ISqliteService, SqliteService>(serviceProvider => new SqliteService("Data Source=db.db"));
 builder.Services.AddSingleton<IMongoService, MongoService>(serviceProvider => new MongoService(builder.Configuration.GetSection("mongo")["ConnectionUri"], "同步库"));
+builder.Services.AddSingleton<IPostgreSQLService, PostgreSQLService>(serviceProvider => new PostgreSQLService(builder.Configuration.GetSection("postgresql")["ConnectionUrl"]));
+
 #region 注册Jwt验证
 builder.Services.AddAuthentication(o => {
     o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
