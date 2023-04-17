@@ -5,6 +5,7 @@ using Controls.Net7.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using static MongoDB.Driver.WriteConcern;
 
 namespace Controls.Net7.Api.Controllers
 {
@@ -17,7 +18,7 @@ namespace Controls.Net7.Api.Controllers
     {
         private readonly IPostgreSQLService _postgreSQLService;
         private readonly IMongoService _iMongoService;
-
+        public static int _count = 0;
         public PostgreSQLController(IPostgreSQLService postgreSQLService, IMongoService iMongoService)
         {
             _postgreSQLService = postgreSQLService;
@@ -45,31 +46,38 @@ namespace Controls.Net7.Api.Controllers
         public async Task<ApiResult> BMTP() 
         {
           var datas=  _iMongoService.GetMany("代码库", Builders<Codess>.Filter.Ne("_id", ""));
-           int counts= await _postgreSQLService.ActionUserTable(0, SqlAction.deleteall);
-            int infect = 0;
-            string message = "";
-           foreach (var data in datas) 
+
+           // var pqdata = await _postgreSQLService.SelectUserAllAsync();
+            if (datas.Count() != _count)
             {
-                PostSql postSql = new PostSql();
-                postSql._id = data._id;
-                postSql.timeupate = data.TimeUpate;
-                postSql.createtime = data.TimeUpate;
-                postSql.froms = data.From;
-                postSql.code=data.Code;
-                postSql.languages = data.Language;
-                postSql.readtime = data.ReadTime;
-                postSql.readcount = data.ReadCount;
-                postSql.usedetail = data.UseDetail;
-                postSql.technical = data.Technical;
-                postSql.use = data.Use;
-                try
+                _count = datas.Count();
+                int counts = await _postgreSQLService.ActionUserTable(0, SqlAction.deleteall);
+                int infect = 0;
+                string message = "";
+                foreach (var data in datas)
                 {
-                    int c = await _postgreSQLService.ActionUserTable(postSql, SqlAction.Add);
-                    infect = infect + c;
-                }catch (Exception ex) { message = ex.Message; }
-            }
-            return ResultOk("删除条数："+counts+",查询到芒果条数："+datas.Count()+",postgresql插入数："+ infect+",提示"+ message+","+DateTime.Now.ToString());
-        
+                    PostSql postSql = new PostSql();
+                    postSql._id = data._id;
+                    postSql.timeupate = data.TimeUpate;
+                    postSql.createtime = data.TimeUpate;
+                    postSql.froms = data.From;
+                    postSql.code = data.Code;
+                    postSql.languages = data.Language;
+                    postSql.readtime = data.ReadTime;
+                    postSql.readcount = data.ReadCount;
+                    postSql.usedetail = data.UseDetail;
+                    postSql.technical = data.Technical;
+                    postSql.use = data.Use;
+                    try
+                    {
+                        int c = await _postgreSQLService.ActionUserTable(postSql, SqlAction.Add);
+                        infect = infect + c;
+                    }
+                    catch (Exception ex) { message = ex.Message; }
+                }
+                return ResultOk("删除条数：" + counts + ",查询到芒果条数：" + datas.Count() + ",postgresql插入数：" + infect + ",提示" + message + "," + DateTime.Now.ToString() + "\r\n");
+            }return ResultOk("未检出到新增数据" + DateTime.Now.ToString()+"\r\n");
+
         }
     }
 }
