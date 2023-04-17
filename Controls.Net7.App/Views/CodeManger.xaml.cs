@@ -19,14 +19,14 @@ public partial class CodeManger : ContentPage
     {
         Filelist.IsRefreshing = true;
         var resp = await "alldata".GetUrl().PostAsync().ReceiveJson<CodesResult>();
-        Filelist.ItemsSource = resp.Data.OrderByDescending(o=>o.CreateTime);        
+        Filelist.ItemsSource = resp.Data.OrderByDescending(o=>DateTime.Parse(o.CreateTime));        
         codesses =resp.Data;
         DateTime timetoday = DateTime.Today.AddHours(-12);
         DateTime timelastweek = DateTime.Today.AddDays(-7);
         DateTime timelastmons = DateTime.Today.AddMonths(-1);
-        var ltoday = resp.Data.FindAll(o => o.CreateTime.CompareTo(timetoday.ToString()) > 0);
-        var llastweek = resp.Data.FindAll(o => o.CreateTime.CompareTo(timelastweek.ToString()) > 0);
-        var llastmons = resp.Data.FindAll(o => o.CreateTime.CompareTo(timelastmons.ToString()) > 0);
+        var ltoday = resp.Data.FindAll(o => DateTime.Parse(o.CreateTime).CompareTo(timetoday) > 0);
+        var llastweek = resp.Data.FindAll(o => DateTime.Parse(o.CreateTime).CompareTo(timelastweek) > 0);
+        var llastmons = resp.Data.FindAll(o => DateTime.Parse(o.CreateTime).CompareTo(timelastmons) > 0);
         Filelist.IsRefreshing = false;
         status.Text = "今日新增：" + ltoday.Count().ToString()
         + " 近7天：" + llastweek.Count().ToString()
