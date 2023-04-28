@@ -286,7 +286,7 @@ namespace WindowApi
                     mailMessage.SubjectEncoding = Encoding.UTF8;
                     smtpClient.EnableSsl = true;
                     //qq启用了“客户端授权码”，要用授权码代替密码
-                    smtpClient.Credentials = new NetworkCredential("1243500742@qq.com", "wflauoxcgqsvbaei");
+                    smtpClient.Credentials = new NetworkCredential("1243500742@qq.com", "***");
                     smtpClient.Send(mailMessage);
                 }
             }catch (Exception ex) { File.AppendAllText(AppContext.BaseDirectory + "log.txt", DateTime.Now.ToString() + ex.Message+"\r\n"); }
