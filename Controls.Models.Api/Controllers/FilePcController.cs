@@ -10,7 +10,7 @@ namespace Controls.Net7.Api.Controllers
     /// 文件管理
     /// </summary>
     [Route("[controller]")]
-    [Authorize("公共接口")]
+   // [Authorize("公共接口")]
 
     public class FilePcController : AppBaseController
     {
