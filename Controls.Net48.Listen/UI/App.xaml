@@ -1,0 +1,21 @@
+﻿<Application x:Class="UI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:UI"
+             Startup="OnStartup"
+             xmlns:base="clr-namespace:UI.Controls.Base"
+             >
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Tai;component/Resources/Themes/Light.xaml"/>
+                <ResourceDictionary Source="/Tai;component/Resources/Themes/Common.xaml"/>
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+        
+       
+        
+
+    </Application.Resources>
+</Application>
