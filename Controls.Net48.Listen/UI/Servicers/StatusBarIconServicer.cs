@@ -54,12 +54,12 @@ namespace UI.Servicers
             _appConfig = appConfig_;
             _mainVM = mainVM_;
         }
-        public void Init()
+        public async void Init()
         {
             InitMenu();
-
+            var datas = await App.ReaderConfigAsync();
             _statusBarIcon = new System.Windows.Forms.NotifyIcon();
-            _statusBarIcon.Visible = true;
+            _statusBarIcon.Visible = datas.needwindows;
             _statusBarIcon.MouseClick += _statusBarIcon_MouseClick;
             _statusBarIcon.MouseDoubleClick += _statusBarIcon_MouseDoubleClick;
 

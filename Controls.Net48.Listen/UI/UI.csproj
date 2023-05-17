@@ -100,6 +100,9 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="SharpConfig, Version=3.2.9.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SharpConfig.3.2.9.1\lib\net461\SharpConfig.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -133,6 +136,7 @@
     </ApplicationDefinition>
     <Compile Include="Base\Color\Colors.cs" />
     <Compile Include="Base\Color\ColorTypes.cs" />
+    <Compile Include="Base\config.cs" />
     <Compile Include="Base\UIHelper.cs" />
     <Compile Include="Controls\Base\DiffValue.cs" />
     <Compile Include="Controls\Base\EmptyData.cs" />

@@ -55,6 +55,39 @@ namespace Controls.Net7.Api.Controllers
             return ResultOk(FileHelper.GetFilelist());
         }
         /// <summary>
+        /// 上传文件
+        /// </summary>
+        /// <param name="files">文件</param>
+        /// <param name="dirname">文件夹</param>
+        /// <returns></returns>
+        [Route("uploadimagedir")]
+        [HttpPost]
+        public async Task<ApiResult> ImageDirAsync(List<IFormFile> files, string dirname)
+        {
+            try
+            {
+                var filePath = Path.Combine(FileHelper.GetBasePath(),dirname);
+                if (!System.IO.Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
+                foreach (var formFile in files)
+                {
+                    if (formFile.Length > 0)
+                    {
+                        string savepath = Path.Combine(filePath, formFile.FileName.ToString());
+                        if (System.IO.File.Exists(savepath)) return ResultOk(formFile.FileName.ToString()+"已存在！");
+
+                        using (var stream = System.IO.File.Create(savepath))
+                        {
+                            await formFile.CopyToAsync(stream);
+                        }
+
+                    }
+                }
+
+            }
+            catch (Exception e) { ResultWarn(e.Message); }
+            return ResultOk(FileHelper.GetFilelist());
+        }
+        /// <summary>
         /// 获取文件列表
         /// </summary>
         /// <returns></returns>
