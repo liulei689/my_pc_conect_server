@@ -20,7 +20,7 @@ using static Humanizer.In;
 namespace Controls.Net7.Api.Controllers
 {
     /// <summary>
-    /// token相关
+    /// token相关操作
     /// </summary>
     [Route("api/[controller]/[action]")]
     [EnableCors]
