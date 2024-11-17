@@ -70,7 +70,7 @@ public partial class UserManger : ContentPage
         string action = await DisplayActionSheet("选择操作?", "取消", null, "删除", "修改", "新增");
         if (action == "删除")
         {
-            if (await DisplayAlert("确定删除?", "确定删除3", "是", "否"))
+            if (await DisplayAlert("确定删除?", "确定删除31", "是", "否"))
             {              
                 if (sd != null)
                 {
